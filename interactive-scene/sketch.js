@@ -16,9 +16,9 @@ let hinataImg;
 let kagsImg;
 let kenmaImg;
 let kurooImg;
-let characterList = ['hinataImg', 'kagsImg', 'kenmaImg', 'kurooImg'];
+// let characterList = ['hinataImg', 'kagsImg', 'kenmaImg', 'kurooImg'];
 let n = 0;
-let character = hinataImg;
+// let character = hinataImg;
 // let character = characterList[n];
 
 
@@ -30,18 +30,19 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(windowWidth, windowHeight);
+
+  background(220)
 }
 
 function draw() {
-  background(220);
-  
   showCharacter();
 }
 
 function keyPressed() {
-  if (key === '1') { 
-    background('rgb(16,23,114)');
+  if (key === 'b') { 
+    background(rbga(16, 23, 114))
+    // background('rgb(16,23,114)');
   }
   else if (key === '2') {
    background('rgb(236,0,0)');
@@ -62,5 +63,5 @@ function keyPressed() {
 // }
 
 function showCharacter() {
-  image(character, mouseX*0.5, mouseY*0.5, character.width*reduction, character.height*reduction);
+  image(hinataImg, mouseX*0.5, mouseY*0.5, hinataImg.width*reduction, hinataImg.height*reduction);
 }
