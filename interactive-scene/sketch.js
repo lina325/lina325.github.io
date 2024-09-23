@@ -10,7 +10,6 @@
 
 let x = 200;
 let y = 200;
-let bgcolour = 220;
 let reduction = 0.4;
 
 let hinataImg;
@@ -19,7 +18,8 @@ let kenmaImg;
 let kurooImg;
 let characterList = ['hinataImg', 'kagsImg', 'kenmaImg', 'kurooImg'];
 let n = 0;
-let character = characterList[n];
+let character = hinataImg;
+// let character = characterList[n];
 
 
 function preload() {
@@ -34,33 +34,33 @@ function setup() {
 }
 
 function draw() {
-  background(bgcolour);
+  background(220);
   
   showCharacter();
 }
 
 function keyPressed() {
   if (key === '1') { 
-    bgcolour = 'rgb(16,23,114)'
+    background('rgb(16,23,114)');
   }
   else if (key === '2') {
-    bgcolour = 'rgb(236,0,0)'
+   background('rgb(236,0,0)');
   }
   else if (key === '3') {
-    bgcolour = 'white'
+    background('white');
   }
   else if (key === '4') {
-    bgcolour = 'black'
+    background('black');
   }
   // else if (key === '5') {}
   // else if (key === '6') {}
   // else if (key === '7') {}
 }
 
-function mousePressed(){
-  character = characterList[n+1]; 
-}
+// function mousePressed(){
+//   character = characterList[n+1]; 
+// }
 
 function showCharacter() {
-  image(character, x - character.width*reduction*0.5, y - character.height*reduction*0.5, character.width*reduction, character.height*reduction);
+  image(character, mouseX*0.5, mouseY*0.5, character.width*reduction, character.height*reduction);
 }
