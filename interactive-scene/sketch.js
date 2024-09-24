@@ -8,60 +8,88 @@
 
 // Click on the canvas to begin detecting key presses
 
+// Set variables
 let x = 200;
 let y = 200;
 let reduction = 0.4;
+let bgcolour = 220;
 
 let hinataImg;
 let kagsImg;
 let kenmaImg;
 let kurooImg;
-// let characterList = ['hinataImg', 'kagsImg', 'kenmaImg', 'kurooImg'];
+let bokutoImg;
+let akaashiImg;
+let atusmuImg;
+let osamuImg;
 let n = 0;
-// let character = hinataImg;
-// let character = characterList[n];
 
-
+// Load all images
 function preload() {
-  hinataImg = loadImage('hinataCrow.png');
-  kagsImg = loadImage('kagsCrow.png');
-  kenmaImg = loadImage('kenmaCat.png');
-  kurooImg = loadImage('kurooCat.png');
+  hinataImg = loadImage('characters/hinataCrow.png');
+  kagsImg = loadImage('characters/kagsCrow.png');
+  kenmaImg = loadImage('characters/kenmaCat.png');
+  kurooImg = loadImage('characters/kurooCat.png');
+  bokutoImg = loadImage("characters/bokutoOwl.png");
+  akaashiImg = loadImage("characters/akaashiOwl.png");
+  atusmuImg = loadImage("characters/atsumuFox.png");
+  osamuImg = loadImage("characters/osamuFox.png");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
-  background(220)
 }
 
 function draw() {
+  background(bgcolour)
+
   showCharacter();
 }
 
-function keyPressed() {
-  if (key === 'b') { 
-    background(rbga(16, 23, 114))
-    // background('rgb(16,23,114)');
+
+function keyPressed() {       //Add iskeypressed to flash banner
+
+  // Change background colour
+  if (key === '1') { 
+    bgcolour = ("#040942")
   }
   else if (key === '2') {
-   background('rgb(236,0,0)');
+    bgcolour = ("#b00202");
   }
   else if (key === '3') {
-    background('white');
+    bgcolour = ("#faf6eb");
   }
   else if (key === '4') {
-    background('black');
+    bgcolour = ("#0e0e0f");
   }
-  // else if (key === '5') {}
-  // else if (key === '6') {}
-  // else if (key === '7') {}
+
+  // Change character
+  else if (keyCode === RIGHT_ARROW) {
+    if (n < 7) {
+      n += 1
+    }
+    else {
+      n = n
+    }
+  }
+  else if (keyCode === LEFT_ARROW) {
+    if (n > 0) {
+      n -= 1
+    }
+    else {
+      n = n
+    }
+  }
 }
 
-// function mousePressed(){
-//   character = characterList[n+1]; 
-// }
+function mousePressed(){
+  //Make it draw it to tha canvas
+}
 
 function showCharacter() {
-  image(hinataImg, mouseX*0.5, mouseY*0.5, hinataImg.width*reduction, hinataImg.height*reduction);
+  // let character = characterList[n];
+  let characterList = [hinataImg, kagsImg, kenmaImg, kurooImg, bokutoImg, akaashiImg, atusmuImg, osamuImg];
+  let character = characterList[n];
+
+  image(character, mouseX - character.width*reduction*0.5, mouseY - character.height*reduction*0.5, character.width*reduction, character.height*reduction);
 }
