@@ -48,7 +48,6 @@ function draw() {
 
 
 function keyPressed() {       //Add iskeypressed to flash banner
-
   // Change background colour
   if (key === '1') { 
     bgcolour = ("#040942")
