@@ -1,15 +1,18 @@
-// Traffic Light Starter Code
-// Your Name Here
-// The Date Here
+// Traffic Light Starter Code ---> Check Mr. Schellengerb's repo for better solution
+// Angelina Zhu
+// Sept 24, 2024
 
 // GOAL: make a 'traffic light' simulator. For now, just have the light
 // changing according to time. You may want to investigate the millis()
 // function at https://p5js.org/reference/#/p5/millis
 
+// Use descriptive variables (even if they're long cuz you can just autofill it)
+// Never reassign const variables (they're constant) - it'll throw an error (I think)
+
 let light = "green"; 
-let greenTime = 6000;
-let yellowTime = 3000;
-let redTime = 5000;
+const GREEN_LIGHT_TIME = 6000;
+const YELLOW_LIGHT_TIME = 3000;
+const RED_LIGHT_TIME = 5000;
 // let light = ["green", "yellow", "red"]
 // let times = [6000, 3000, 5000]
 // let n = 0
@@ -53,17 +56,17 @@ function changeLights() {
   //   n = 0;
   // }
 
-  if (millis() > lastChanged + greenTime && light === "green") {
+  if (millis() > lastChanged + GREEN_LIGHT_TIME && light === "green") {
     light = "yellow";
-    lastChanged = millis()
+    lastChanged = millis();
   }
-  else if (millis() > lastChanged + yellowTime && light === "yellow") {
+  else if (millis() > lastChanged + YELLOW_LIGHT_TIME && light === "yellow") {
     light = "red";
-    lastChanged = millis()
+    lastChanged = millis();
   }
-  else if (millis() > lastChanged + redTime && light === "red") {
+  else if (millis() > lastChanged + RED_LIGHT_TIME && light === "red") {
     light = "green";
-    lastChanged = millis()
+    lastChanged = millis();
   }
 
   // Change the image
