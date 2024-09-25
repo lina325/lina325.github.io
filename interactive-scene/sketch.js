@@ -24,16 +24,27 @@ let atusmuImg;
 let osamuImg;
 let n = 0;
 
+let karasunoBgImg;
+let nekomaBgImg;
+let fukorodaniBgImg;
+let inarizakiBgImg;
+
+
 // Load all images
 function preload() {
-  hinataImg = loadImage('characters/hinataCrow.png');
-  kagsImg = loadImage('characters/kagsCrow.png');
-  kenmaImg = loadImage('characters/kenmaCat.png');
-  kurooImg = loadImage('characters/kurooCat.png');
+  hinataImg = loadImage("characters/hinataCrow.png");
+  kagsImg = loadImage("characters/kagsCrow.png");
+  kenmaImg = loadImage("characters/kenmaCat.png");
+  kurooImg = loadImage("characters/kurooCat.png");
   bokutoImg = loadImage("characters/bokutoOwl.png");
   akaashiImg = loadImage("characters/akaashiOwl.png");
   atusmuImg = loadImage("characters/atsumuFox.png");
   osamuImg = loadImage("characters/osamuFox.png");
+
+  karasunoBgImg = loadImage("background-images/karasuno.png");
+  nekomaBgImg = loadImage("background-images/nekoma.png");
+  fukorodaniBgImg = loadImage("background-images/fukorodani.png");
+  inarizakiBgImg = loadImage("background-images/inarizaki.png");
 }
 
 function setup() {
@@ -81,12 +92,14 @@ function keyPressed() {       //Add iskeypressed to flash banner
   }
 }
 
-function mousePressed(){
-  //Make it draw it to tha canvas
+function mousePressed() {
+  // let characterList = [hinataImg, kagsImg, kenmaImg, kurooImg, bokutoImg, akaashiImg, atusmuImg, osamuImg];
+  // let character = characterList[n];
+
+  // image(character, mouseX - character.width*reduction*0.5, mouseY - character.height*reduction*0.5, character.width*reduction, character.height*reduction);
 }
 
 function showCharacter() {
-  // let character = characterList[n];
   let characterList = [hinataImg, kagsImg, kenmaImg, kurooImg, bokutoImg, akaashiImg, atusmuImg, osamuImg];
   let character = characterList[n];
 
