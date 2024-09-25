@@ -9,9 +9,6 @@
 // Click on the canvas to begin detecting key presses
 
 // Set variables
-let x = 200;
-let y = 200;
-let reduction = 0.4;
 let bgcolour = 220;
 
 let hinataImg;
@@ -23,11 +20,16 @@ let akaashiImg;
 let atusmuImg;
 let osamuImg;
 let n = 0;
+let reduction = 0.4;
 
 let karasunoBgImg;
 let nekomaBgImg;
 let fukorodaniBgImg;
 let inarizakiBgImg;
+
+let flashFrequency = 1000;
+let lastTimeChanged = 0;
+let showImage = true;
 
 
 // Load all images
@@ -52,42 +54,48 @@ function setup() {
 }
 
 function draw() {
-  background(bgcolour)
+  background(bgcolour);
 
   showCharacter();
 }
 
 
-function keyPressed() {       //Add iskeypressed to flash banner
+function keyPressed() { 
   // Change background colour
-  if (key === '1') { 
-    bgcolour = ("#040942")
+  if (key === "1") { 
+    bgcolour = "#040942";
+    if (keyIsDown) {
+      if (millis() > lastTimeChanged + flashFrequency) {
+        showImage = !showImage;
+        lastTimeChanged = millis();
+      }
+    }
   }
-  else if (key === '2') {
-    bgcolour = ("#b00202");
+  else if (key === "2") {
+    bgcolour = "#b00202";
   }
-  else if (key === '3') {
-    bgcolour = ("#faf6eb");
+  else if (key === "3") {
+    bgcolour = "#faf6eb";
   }
-  else if (key === '4') {
-    bgcolour = ("#0e0e0f");
+  else if (key === "4") {
+    bgcolour = "#0e0e0f";
   }
 
   // Change character
   else if (keyCode === RIGHT_ARROW) {
     if (n < 7) {
-      n += 1
+      n += 1;
     }
     else {
-      n = n
+      n;
     }
   }
   else if (keyCode === LEFT_ARROW) {
     if (n > 0) {
-      n -= 1
+      n -= 1;
     }
     else {
-      n = n
+      n;
     }
   }
 }
@@ -104,4 +112,29 @@ function showCharacter() {
   let character = characterList[n];
 
   image(character, mouseX - character.width*reduction*0.5, mouseY - character.height*reduction*0.5, character.width*reduction, character.height*reduction);
+}
+
+function showBgImage() {
+  let bgcolours = ["#040942", "#b00202", "#faf6eb", "#0e0e0f"];
+  let m;
+
+  if (key === "49") {
+    m = 0;
+  }
+  else if (keyIsDown("50")) {
+    m = 1;
+  }
+  else if (keyIsDown("51")) {
+    m = 2;
+  }
+  else if (keyIsDown("52")) {
+    m = 3;
+  }
+
+  if (showImage) {
+    image(karasunoBgImg, windowWidth*0.5 - karasunoBgImg.width*0.5, windowHeight*0.5 - karasunoBgImg.height*0.5);
+  }
+  else {
+    bgcolour = bgcolours[m];
+  }
 }
