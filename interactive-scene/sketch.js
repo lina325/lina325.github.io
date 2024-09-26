@@ -29,7 +29,7 @@ let inarizakiBgImg;
 
 let flashFrequency = 1000;
 let lastTimeChanged = 0;
-let showImage = true;
+let showImage = false;
 
 
 // Load all images
@@ -57,6 +57,8 @@ function draw() {
   background(bgcolour);
 
   showCharacter();
+
+  flashBackgroundIfNeeded();
 }
 
 
@@ -64,12 +66,6 @@ function keyPressed() {
   // Change background colour
   if (key === "1") { 
     bgcolour = "#040942";
-    if (keyIsDown) {
-      if (millis() > lastTimeChanged + flashFrequency) {
-        showImage = !showImage;
-        lastTimeChanged = millis();
-      }
-    }
   }
   else if (key === "2") {
     bgcolour = "#b00202";
@@ -100,6 +96,15 @@ function keyPressed() {
   }
 }
 
+function flashBackgroundIfNeeded() {
+  if (keyIsDown) {
+    if (millis() > lastTimeChanged + flashFrequency) {
+      showImage = !showImage;
+      lastTimeChanged = millis();
+    }
+  }
+}
+
 function mousePressed() {
   // let characterList = [hinataImg, kagsImg, kenmaImg, kurooImg, bokutoImg, akaashiImg, atusmuImg, osamuImg];
   // let character = characterList[n];
@@ -115,26 +120,27 @@ function showCharacter() {
 }
 
 function showBgImage() {
-  let bgcolours = ["#040942", "#b00202", "#faf6eb", "#0e0e0f"];
+  let bgColours = ["#040942", "#b00202", "#faf6eb", "#0e0e0f"];
+  let bgImages = [karasunoBgImg, nekomaBgImg, fukorodaniBgImg, inarizakiBgImg];
   let m;
 
   if (key === "49") {
     m = 0;
   }
-  else if (keyIsDown("50")) {
+  else if (key === "50") {
     m = 1;
   }
-  else if (keyIsDown("51")) {
+  else if (key === "51") {
     m = 2;
   }
-  else if (keyIsDown("52")) {
+  else if (key === "52") {
     m = 3;
   }
 
   if (showImage) {
-    image(karasunoBgImg, windowWidth*0.5 - karasunoBgImg.width*0.5, windowHeight*0.5 - karasunoBgImg.height*0.5);
+    image(bgImages[m], windowWidth*0.5 - bgImages[m].width*0.5, windowHeight*0.5 - bgImages[m].height*0.5);
   }
   else {
-    bgcolour = bgcolours[m];
+    bgcolour = bgColours[m];
   }
 }
