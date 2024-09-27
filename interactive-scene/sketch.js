@@ -3,13 +3,15 @@
 // Sept __, 2024
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// Arrays, mouseClicked, 
 
 
 // Click on the canvas to begin detecting key presses
 
 // Set variables
 let bgcolour = 220;
+let n = 0;
+let reduction = 0.4;
 
 let hinataImg;
 let kagsImg;
@@ -19,8 +21,6 @@ let bokutoImg;
 let akaashiImg;
 let atusmuImg;
 let osamuImg;
-let n = 0;
-let reduction = 0.4;
 
 let karasunoBgImg;
 let nekomaBgImg;
@@ -58,6 +58,7 @@ function draw() {
 
   showCharacter();
 
+  // showBgImage();
   flashBackgroundIfNeeded();
 }
 
@@ -96,12 +97,36 @@ function keyPressed() {
   }
 }
 
+// Flash banner in the background
 function flashBackgroundIfNeeded() {
-  if (keyIsDown) {
+  let bgImages = [karasunoBgImg, nekomaBgImg, fukorodaniBgImg, inarizakiBgImg];
+  let m;
+
+  if (keyIsDown(32)) {
     if (millis() > lastTimeChanged + flashFrequency) {
       showImage = !showImage;
       lastTimeChanged = millis();
     }
+  }
+
+  if (bgcolour === "#040942") {
+    m = 0;
+  }
+  if (bgcolour === "#b00202") {
+    m = 1;
+  }
+  if (bgcolour === "#faf6eb") {
+    m = 2;
+  }
+  if (bgcolour === "#0e0e0f") {
+    m = 3;
+  }
+    
+  if (showImage) {
+    image(bgImages[m], windowWidth*0.5 - bgImages[m].width*0.5, windowHeight*0.5 - bgImages[m].height*0.5);
+  }
+  else {
+    bgcolour;
   }
 }
 
@@ -112,6 +137,7 @@ function mousePressed() {
   // image(character, mouseX - character.width*reduction*0.5, mouseY - character.height*reduction*0.5, character.width*reduction, character.height*reduction);
 }
 
+// Show character on screen
 function showCharacter() {
   let characterList = [hinataImg, kagsImg, kenmaImg, kurooImg, bokutoImg, akaashiImg, atusmuImg, osamuImg];
   let character = characterList[n];
@@ -119,28 +145,27 @@ function showCharacter() {
   image(character, mouseX - character.width*reduction*0.5, mouseY - character.height*reduction*0.5, character.width*reduction, character.height*reduction);
 }
 
-function showBgImage() {
-  let bgColours = ["#040942", "#b00202", "#faf6eb", "#0e0e0f"];
-  let bgImages = [karasunoBgImg, nekomaBgImg, fukorodaniBgImg, inarizakiBgImg];
-  let m;
+// function showBgImage() {
+//   let bgImages = [karasunoBgImg, nekomaBgImg, fukorodaniBgImg, inarizakiBgImg];
+//   let m;
 
-  if (key === "49") {
-    m = 0;
-  }
-  else if (key === "50") {
-    m = 1;
-  }
-  else if (key === "51") {
-    m = 2;
-  }
-  else if (key === "52") {
-    m = 3;
-  }
-
-  if (showImage) {
-    image(bgImages[m], windowWidth*0.5 - bgImages[m].width*0.5, windowHeight*0.5 - bgImages[m].height*0.5);
-  }
-  else {
-    bgcolour = bgColours[m];
-  }
-}
+//   if (bgcolour === "#040942") {
+//     m = 0;
+//   }
+//   if (bgcolour === "#b00202") {
+//     m = 1;
+//   }
+//   if (bgcolour === "#faf6eb") {
+//     m = 2;
+//   }
+//   if (bgcolour === "#0e0e0f") {
+//     m = 3;
+//   }
+    
+//   if (showImage) {
+//     image(bgImages[m], windowWidth*0.5 - bgImages[m].width*0.5, windowHeight*0.5 - bgImages[m].height*0.5);
+//   }
+//   else {
+//     bgcolour;
+//   }
+// }

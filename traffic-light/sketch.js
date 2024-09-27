@@ -59,14 +59,17 @@ function changeLights() {
   if (millis() > lastChanged + GREEN_LIGHT_TIME && light === "green") {
     light = "yellow";
     lastChanged = millis();
+    console.log(light);
   }
   else if (millis() > lastChanged + YELLOW_LIGHT_TIME && light === "yellow") {
     light = "red";
     lastChanged = millis();
+    console.log(light);
   }
   else if (millis() > lastChanged + RED_LIGHT_TIME && light === "red") {
     light = "green";
     lastChanged = millis();
+    console.log(light);
   }
 
   // Change the image
