@@ -9,10 +9,21 @@
 // Click on the canvas to begin detecting key presses
 
 // Set variables
-let bgcolour = 220;
-let n = 0;
-let reduction = 0.4;
 
+// Background
+let bgcolour = 220;
+let bgsizing = 1.5;
+
+let karasunoBgImg;
+let nekomaBgImg;
+let fukorodaniBgImg;
+let inarizakiBgImg;
+
+let flashFrequency = 100;
+let lastTimeChanged = 0;
+let showImage = false;
+
+// Characters
 let hinataImg;
 let kagsImg;
 let kenmaImg;
@@ -22,14 +33,19 @@ let akaashiImg;
 let atusmuImg;
 let osamuImg;
 
-let karasunoBgImg;
-let nekomaBgImg;
-let fukorodaniBgImg;
-let inarizakiBgImg;
+let n = 0;
+let reduction = 0.4;
 
-let flashFrequency = 1000;
-let lastTimeChanged = 0;
-let showImage = false;
+let xPos = [];
+let yPos = [];
+
+// Button
+let buttonWidth = 200;
+let buttonHeight = 80;
+
+
+// Set state
+let screenState = "instructions";
 
 
 // Load all images
@@ -54,14 +70,49 @@ function setup() {
 }
 
 function draw() {
-  background(bgcolour);
+  if (screenState === "instructions") {
+    instructionPage();
+  }
 
-  showCharacter();
+  else if (screenState === "started") {
+    background(bgcolour);
 
-  // showBgImage();
-  flashBackgroundIfNeeded();
+    flashBackground();
+
+    showCharacter();
+
+    stampCharacter();
+  }
 }
 
+function instructionPage() {
+  background(bgcolour);
+
+  // White window with intructions
+  fill(255);
+  rect(windowWidth*0.5 - windowWidth*0.75*0.5, windowHeight*0.5 - windowHeight*0.75*0.5, windowWidth*0.75, windowHeight*0.75);
+
+  fill(0);
+  textAlign(CENTER);
+  textSize(30);
+  text("I don't know what this is :)", windowWidth*0.5, windowHeight*0.3);
+
+  textSize(20);
+  text("Arrow keys - Change character\n Numbers (1-4) - Change background colour\n Hold Space Bar - Flash background\n Mouse Click - Stamp character", windowWidth*0.5, windowHeight*0.4);
+
+  // OK Button
+  fill(225);
+  rect(windowWidth*0.5 - buttonWidth*0.5, windowHeight*0.65 - buttonHeight*0.5, buttonWidth, buttonHeight)
+
+  fill(0);
+  textSize(30);
+  text("Ok", windowWidth*0.5, windowHeight*0.66);
+
+  // Check if button is being pressed 
+  if (mouseIsPressed && mouseX <= windowWidth*0.5 + buttonWidth*0.5 && mouseX >= windowWidth*0.5 - buttonWidth*0.5 && mouseY <= windowHeight*0.65 + buttonHeight*0.5 && mouseY >= windowHeight*0.65 - buttonHeight*0.5) {
+    screenState = "started";
+  }
+}
 
 function keyPressed() { 
   // Change background colour
@@ -94,11 +145,11 @@ function keyPressed() {
     else {
       n;
     }
-  }
+  }  
 }
 
 // Flash banner in the background
-function flashBackgroundIfNeeded() {
+function flashBackground() {
   let bgImages = [karasunoBgImg, nekomaBgImg, fukorodaniBgImg, inarizakiBgImg];
   let m;
 
@@ -123,19 +174,27 @@ function flashBackgroundIfNeeded() {
   }
     
   if (showImage) {
-    image(bgImages[m], windowWidth*0.5 - bgImages[m].width*0.5, windowHeight*0.5 - bgImages[m].height*0.5);
+    image(bgImages[m], windowWidth*0.5 - bgImages[m].width*bgsizing*0.5, windowHeight*0.5 - bgImages[m].height*bgsizing*0.5, bgImages[m].width*bgsizing, bgImages[m].height*bgsizing);
   }
   else {
     bgcolour;
   }
 }
 
-function mousePressed() {
-  // let characterList = [hinataImg, kagsImg, kenmaImg, kurooImg, bokutoImg, akaashiImg, atusmuImg, osamuImg];
-  // let character = characterList[n];
+function stampCharacter() {
+  let characterList = [hinataImg, kagsImg, kenmaImg, kurooImg, bokutoImg, akaashiImg, atusmuImg, osamuImg];
+  let character = characterList[n];
 
-  // image(character, mouseX - character.width*reduction*0.5, mouseY - character.height*reduction*0.5, character.width*reduction, character.height*reduction);
+  for (let i = 0; i < xPos.length; i++) {
+    image(character, xPos[i] - character.width*reduction*0.5, yPos[i] - character.height*reduction*0.5, character.width*reduction, character.height*reduction);
+  }
 }
+
+function mouseClicked() {
+  append(xPos, mouseX);
+  append(yPos, mouseY); 
+}
+
 
 // Show character on screen
 function showCharacter() {
@@ -144,28 +203,3 @@ function showCharacter() {
 
   image(character, mouseX - character.width*reduction*0.5, mouseY - character.height*reduction*0.5, character.width*reduction, character.height*reduction);
 }
-
-// function showBgImage() {
-//   let bgImages = [karasunoBgImg, nekomaBgImg, fukorodaniBgImg, inarizakiBgImg];
-//   let m;
-
-//   if (bgcolour === "#040942") {
-//     m = 0;
-//   }
-//   if (bgcolour === "#b00202") {
-//     m = 1;
-//   }
-//   if (bgcolour === "#faf6eb") {
-//     m = 2;
-//   }
-//   if (bgcolour === "#0e0e0f") {
-//     m = 3;
-//   }
-    
-//   if (showImage) {
-//     image(bgImages[m], windowWidth*0.5 - bgImages[m].width*0.5, windowHeight*0.5 - bgImages[m].height*0.5);
-//   }
-//   else {
-//     bgcolour;
-//   }
-// }
