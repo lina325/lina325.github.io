@@ -1,12 +1,12 @@
-// Project Title
+// Haikyuu Chaos
 // Angelina Zhu
-// Sept __, 2024
+// Sept 30, 2024
 //
 // Extra for Experts:
-// Arrays, mouseClicked, 
+// Used arrays to store images and image positioning
 
 
-// Click on the canvas to begin detecting key presses
+// Got the idea to use arrays to stamp the images from the shape-stamper project 
 
 // Set variables
 
@@ -36,13 +36,16 @@ let osamuImg;
 let n = 0;
 let reduction = 0.4;
 
+let characterList;
+let character;
+
 let xPos = [];
 let yPos = [];
+let stampedChar = [];
 
 // Button
 let buttonWidth = 200;
 let buttonHeight = 80;
-
 
 // Set state
 let screenState = "instructions";
@@ -67,6 +70,8 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+
+  characterList = [hinataImg, kagsImg, kenmaImg, kurooImg, bokutoImg, akaashiImg, atusmuImg, osamuImg];
 }
 
 function draw() {
@@ -79,9 +84,7 @@ function draw() {
 
     flashBackground();
 
-    showCharacter();
-
-    stampCharacter();
+    displayCharacter();
   }
 }
 
@@ -148,11 +151,11 @@ function keyPressed() {
   }  
 }
 
-// Flash banner in the background
 function flashBackground() {
   let bgImages = [karasunoBgImg, nekomaBgImg, fukorodaniBgImg, inarizakiBgImg];
   let m;
 
+  // Check if space key is down
   if (keyIsDown(32)) {
     if (millis() > lastTimeChanged + flashFrequency) {
       showImage = !showImage;
@@ -160,6 +163,7 @@ function flashBackground() {
     }
   }
 
+  // Check which banner to flash
   if (bgcolour === "#040942") {
     m = 0;
   }
@@ -173,6 +177,7 @@ function flashBackground() {
     m = 3;
   }
     
+  // Flash the banner
   if (showImage) {
     image(bgImages[m], windowWidth*0.5 - bgImages[m].width*bgsizing*0.5, windowHeight*0.5 - bgImages[m].height*bgsizing*0.5, bgImages[m].width*bgsizing, bgImages[m].height*bgsizing);
   }
@@ -181,25 +186,25 @@ function flashBackground() {
   }
 }
 
-function stampCharacter() {
-  let characterList = [hinataImg, kagsImg, kenmaImg, kurooImg, bokutoImg, akaashiImg, atusmuImg, osamuImg];
-  let character = characterList[n];
+function mouseClicked() {
+  character = characterList[n];
 
-  for (let i = 0; i < xPos.length; i++) {
-    image(character, xPos[i] - character.width*reduction*0.5, yPos[i] - character.height*reduction*0.5, character.width*reduction, character.height*reduction);
+  if (screenState === "started") {
+    append(xPos, mouseX);
+    append(yPos, mouseY); 
+    append(stampedChar, character);
   }
 }
 
-function mouseClicked() {
-  append(xPos, mouseX);
-  append(yPos, mouseY); 
-}
-
-
 // Show character on screen
-function showCharacter() {
-  let characterList = [hinataImg, kagsImg, kenmaImg, kurooImg, bokutoImg, akaashiImg, atusmuImg, osamuImg];
-  let character = characterList[n];
+function displayCharacter() {
+  character = characterList[n];
 
+  // Show character on screen
   image(character, mouseX - character.width*reduction*0.5, mouseY - character.height*reduction*0.5, character.width*reduction, character.height*reduction);
+
+  // Show stamped characters
+  for (let i = 1; i < xPos.length; i++) {
+    image(stampedChar[i], xPos[i] - character.width*reduction*0.5, yPos[i] - character.height*reduction*0.5, character.width*reduction, character.height*reduction);
+  }
 }
