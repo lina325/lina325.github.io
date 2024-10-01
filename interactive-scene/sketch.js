@@ -5,8 +5,8 @@
 // Extra for Experts:
 // Used arrays to store images and image positioning
 
-
 // Got the idea to use arrays to stamp the images from the shape-stamper project 
+
 
 // Set variables
 
@@ -105,7 +105,7 @@ function instructionPage() {
 
   // OK Button
   fill(225);
-  rect(windowWidth*0.5 - buttonWidth*0.5, windowHeight*0.65 - buttonHeight*0.5, buttonWidth, buttonHeight)
+  rect(windowWidth*0.5 - buttonWidth*0.5, windowHeight*0.65 - buttonHeight*0.5, buttonWidth, buttonHeight);
 
   fill(0);
   textSize(30);
