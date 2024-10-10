@@ -17,12 +17,16 @@ function setup() {
 function draw() {
   background(220);
 
-  for (let theRect of hills) {
-    rect(theRect.x, theRect.y, theRect.width, theRect.height);
-  }
+  displayHills();
 
   moveCharacter();
   spawnCharacter();
+}
+
+function displayHills() {
+  for (let theRect of hills) {
+    rect(theRect.x, theRect.y, theRect.width, theRect.height);
+  }
 }
 
 function makeHills(WIDTH_OF_RECTS) {
@@ -30,12 +34,12 @@ function makeHills(WIDTH_OF_RECTS) {
   let deltaTime = 0.001;
 
   // Styling 
-  noStroke;
-  fill("green");
+  noStroke();
+  fill("#035718");
 
   for (let x = 0; x < width; x += WIDTH_OF_RECTS) {
     let theHeight = noise(time) * height;
-    someRect = makeRect(x, theHeight, WIDTH_OF_RECTS);
+    someRect = makeRect(x, theHeight, WIDTH_OF_RECTS); // May be possible to simplify?
     hills.push(someRect);
     time += deltaTime;
   }
@@ -53,12 +57,12 @@ function makeRect(xPos, rectHeight, rectWidth) {
 
 function spawnCharacter() {
   let character = {
+    charW: 50,
     charX: 0,
-    charY: height - hills[0].height,
-    charw: 50,
+    charY: height - hills[0].height, // need to access rectHeight to match the height of the rect each time...
   };
   
-  square(character.charX, character.charY, character.width);
+  square(character.charX, character.charY, character.charW);
 }
 
 function moveCharacter() {
