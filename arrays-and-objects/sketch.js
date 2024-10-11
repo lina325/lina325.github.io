@@ -9,6 +9,9 @@ let hills = [];
 let someRect;
 const WIDTH_OF_RECTS = 2;
 
+let aRect;
+let character;
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   makeHills(WIDTH_OF_RECTS);
@@ -19,11 +22,16 @@ function draw() {
 
   displayHills();
 
-  moveCharacter();
-  spawnCharacter();
+  // moveCharacter();
+  // characterMotion();
+  displayCharacter();
 }
 
 function displayHills() {
+  // Styling
+  noStroke();
+  fill("#035718");
+
   for (let theRect of hills) {
     rect(theRect.x, theRect.y, theRect.width, theRect.height);
   }
@@ -31,47 +39,47 @@ function displayHills() {
 
 function makeHills(WIDTH_OF_RECTS) {
   let time = 0;
-  let deltaTime = 0.001;
-
-  // Styling 
-  noStroke();
-  fill("#035718");
+  let deltaTime = 0.0007; // Look for numbers to make hills less drastic, maybe 0.0003 - 0.0006
 
   for (let x = 0; x < width; x += WIDTH_OF_RECTS) {
     let theHeight = noise(time) * height;
-    someRect = makeRect(x, theHeight, WIDTH_OF_RECTS); // May be possible to simplify?
-    hills.push(someRect);
+    makeRect(x, theHeight, WIDTH_OF_RECTS);
     time += deltaTime;
   }
 }
 
 function makeRect(xPos, rectHeight, rectWidth) {
-  let aRect = {
+  aRect = {
     x: xPos,
     y: height - rectHeight,
     width: rectWidth,
     height: rectHeight,
   };
-  return aRect;
+  hills.push(aRect);
 }
 
-function spawnCharacter() {
-  let character = {
+function displayCharacter() {
+  character = {
     charW: 50,
     charX: 0,
-    charY: height - hills[0].height, // need to access rectHeight to match the height of the rect each time...
+    charY: height, // need to access rectHeight to match the height of the rect each time...
   };
   
+  fill(0);
   square(character.charX, character.charY, character.charW);
 }
 
-function moveCharacter() {
-  if (keyIsPressed) {
-    if (key === RIGHT_ARROW) {
-      character.x += 2;
-    }
-    else if (key === LEFT_ARROW) {
-      character.x -= 2;
-    }
-  }
-}
+// function characterMotion() {
+//   character.charX += 2;
+// }
+
+// function moveCharacter() {
+//   if (keyIsPressed) {
+//     if (key === RIGHT_ARROW) {
+//       character.charX += 2;
+//     }
+//     else if (key === LEFT_ARROW) {
+//       character.charX -= 2;
+//     }
+//   }
+// }
