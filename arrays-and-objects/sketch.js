@@ -12,6 +12,7 @@ const WIDTH_OF_RECTS = 2;
 
 let aRect;
 let character;
+let i = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -27,6 +28,7 @@ function draw() {
 
   displayHills1();
   displayHills();
+  moveHills();
 
   // characterMotion();
   displayCharacter();
@@ -36,14 +38,16 @@ function displayHills() {
   // Styling
   fill("#035718");
 
-  // for (let theRect of hills) {
-  //   rect(theRect.x, theRect.y, theRect.width, theRect.height);
-  // }
+  for (let theRect of hills) {
+    rect(theRect.x, theRect.y, theRect.width, theRect.height);
+  }
+
+  hills.push(hills.shift());
 
   // Maybe a nested loops will work?
-  for (let i = 0; i < width; i++) {
-    rect(hills[i].x, hills[i].y, hills[i].width, hills[i].height);
-  }
+  // for (let i = 0; i < width; i++) {
+  //   rect(hills[i].x, hills[i].y, hills[i].width, hills[i].height);
+  // }
 }
 
 function moveHills() {
@@ -54,7 +58,7 @@ function makeHills(WIDTH_OF_RECTS) {
   let time = 0;
   let deltaTime = 0.0004; // Look for numbers to make hills less drastic, maybe 0.0003 - 0.0006
 
-  for (let x = 0; x < width + 500; x += WIDTH_OF_RECTS) {
+  for (let x = 0; x < width; x += WIDTH_OF_RECTS) {
     let theHeight = noise(time) * (height/2);
     hills.push(makeRect(x, theHeight, WIDTH_OF_RECTS));
     time += deltaTime;
@@ -94,7 +98,7 @@ function setCharacter() {
   character = {
     charW: 50,
     charX: 0,
-    charY: height - hills[0].height, // Take away image height
+    charY: height - hills[0].height - 50, // Take away image height, # is placeholder
   };
 }
 
@@ -104,9 +108,10 @@ function displayCharacter() {
 }
 
 function characterMotion() {
-  character.charX += 2;
+  if (character.charX < width/3) {
+    character.charX += 2;
 
-  // for (let i = 1; i < width; i ++) {
-  character.charY = height - hills[1].height;
-  // }
+    character.charY = height - hills[i].height - character.charW;
+    i ++;
+  }
 }
