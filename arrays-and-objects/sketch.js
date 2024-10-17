@@ -22,7 +22,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  makeHills(WIDTH_OF_RECTS);
+  makeHills(WIDTH_OF_RECTS); // Try adding second half of array where it's reversed
   makeHills1(WIDTH_OF_RECTS);
   setCharacter();
 
@@ -51,7 +51,7 @@ function makeHills(WIDTH_OF_RECTS) {
   let time = 0;
   let deltaTime = 0.0004; 
   
-  for (let x = 0; x < width; x += WIDTH_OF_RECTS) {
+  for (let x = 0; x < width*10; x += WIDTH_OF_RECTS) {
     let theHeight = noise(time) * (height/2);
     hills.push(makeRect(x, theHeight, WIDTH_OF_RECTS));
     time += deltaTime;
@@ -70,7 +70,7 @@ function displayHills() {
 
 function moveHills() {
   // Shift through hill values to access y value
-  hills.push(hills.shift()); 
+  // hills.push(hills.shift()); 
 
   // Move hills to the left
   for (let theRect of hills) { // Loops it but it might be better to try and keep generating...
@@ -136,7 +136,7 @@ function displayCharacter() {
 function characterMotion() {
   if (character.charX < width/3) {
     // Moving character forward
-    character.charX += 1; // Little bit of trouble keeping pace with hills - look into that
+    character.charX += 2; // Little bit of trouble keeping pace with hills - look into that
   }
   // Move character along hills
   character.charY = height - hills[i].height - character.charW;
