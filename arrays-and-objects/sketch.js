@@ -1,6 +1,6 @@
 // Biking Scenery
 // Angelina Zhu
-// Oct 20, 2024
+// Oct 21, 2024
 //
 // Extra for Experts:
 // Exploration into using gifs (Learnt from: https://editor.p5js.org/remarkability/sketches/tuTPZXym9)
@@ -8,7 +8,6 @@
 // Bg image - https://www.freepik.com/free-photo/photorealistic-style-clouds-meadow_93622487.htm#query=nature%20sky&position=5&from_view=keyword&track=ais_hybrid&uuid=7b305107-55d9-44b5-81bc-0dfd923aeddb
 // Biking gif - https://wifflegif.com/gifs/620701-flash-animation-bike-riding-gif
 // Music - Boba Date by Stream Cafe (Royalty Free Music - https://youtu.be/kj1MDJXJ7-I)
-
 
 let hills = [];
 let middleHills = [];
@@ -20,12 +19,13 @@ let aRect;
 let characterProperties;
 let character;
 const REDUCTION = 0.5;
-const EXTRA_SPACE = 12;     // To compensate for slight space at bottom of gif
 let i = 100/2;
 
-let bgMusic;
-let bgImage;
+// To compensate for slight space at bottom of gif
+const EXTRA_SPACE = 12;  
 
+let bgMusic;
+let bgImage;  
 
 function preload() {
   bgMusic = loadSound("bg-music.mp3");
