@@ -1,45 +1,62 @@
-// Project Title
+// Biking Scenery
 // Angelina Zhu
-// Oct __, 2024
+// Oct 20, 2024
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// Exploration into using gifs (Learnt from: https://editor.p5js.org/remarkability/sketches/tuTPZXym9)
+
+// Bg image - https://www.freepik.com/free-photo/photorealistic-style-clouds-meadow_93622487.htm#query=nature%20sky&position=5&from_view=keyword&track=ais_hybrid&uuid=7b305107-55d9-44b5-81bc-0dfd923aeddb
+// Biking gif - https://wifflegif.com/gifs/620701-flash-animation-bike-riding-gif
+// Music - Boba Date by Stream Cafe (Royalty Free Music - https://youtu.be/kj1MDJXJ7-I)
+
 
 let hills = [];
-let hills1 = [];
+let middleHills = [];
+let steepHills = [];
 let someRect;
 const WIDTH_OF_RECTS = 2;
 
 let aRect;
+let characterProperties;
 let character;
-let i = 0;
+const REDUCTION = 0.5;
+const EXTRA_SPACE = 12;     // To compensate for slight space at bottom of gif
+let i = 100/2;
 
+let bgMusic;
 let bgImage;
 
+
 function preload() {
-  bgImage = loadImage("sky.jpg");
+  bgMusic = loadSound("bg-music.mp3");
+  bgImage = loadImage("sky.png");
+  character = createImg("biking-with-fox.gif", "Gif of sketch of a person riding a bike with a fox running in front of them");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  makeHills(WIDTH_OF_RECTS); // Try adding second half of array where it's reversed
-  reverseHill(hills);
-
-  makeHills1(WIDTH_OF_RECTS);
+  makeHills(WIDTH_OF_RECTS); 
+  makeMiddleHills(WIDTH_OF_RECTS);
+  makeSteepHills(WIDTH_OF_RECTS);
   setCharacter();
 
+  // Style rectangles
   noStroke();
 
-  bgImage.width = width;
-  bgImage.height = height;
+  // Size bg image
+  bgImage.width = windowWidth;
+  bgImage.height = windowHeight;
 }
 
 function draw() {
-  background(bgImage); //Maybe look for different image, this one looks funky lol (or draw one yourself)
-  // background("#b7c4f7"); 
+  background(bgImage); 
+  displayText();
 
-  moveHills1();
-  displayHills1();
+  moveSteepHills();
+  displaySteepHills();
+
+  moveMiddleHills();
+  displayMiddleHills();
 
   moveHills();
   displayHills();
@@ -48,18 +65,13 @@ function draw() {
   displayCharacter();
 }
 
-function reverseHill(array) {
-  for (let i = 0; i < array.length; i++) {
-    array[array.length-i];
-  }
-}
-
+// Front set of hills
 function makeHills(WIDTH_OF_RECTS) {
   let time = 0;
   let deltaTime = 0.0004; 
   
-  for (let x = 0; x < width; x += WIDTH_OF_RECTS) {
-    let theHeight = noise(time) * (height/2);
+  for (let x = 0; x < width*2; x += WIDTH_OF_RECTS) {
+    let theHeight = noise(time) * (height/2); // Maybe make all of the hills lower to see the sky
     hills.push(makeRect(x, theHeight, WIDTH_OF_RECTS));
     time += deltaTime;
   }
@@ -67,7 +79,7 @@ function makeHills(WIDTH_OF_RECTS) {
 
 function displayHills() {
   // Styling
-  fill("#035718");
+  fill("#0b7826");
   
   // Draw rects
   for (let theRect of hills) {
@@ -76,47 +88,83 @@ function displayHills() {
 }
 
 function moveHills() {
-  // Shift through hill values to access y value
-  hills.push(hills.shift()); 
-
-  // Move hills to the left
-  for (let theRect of hills) { 
-    if (theRect.x === 0) {
-      theRect.x = width - 2;
-    }
-    else {
+  if (hills[hills.length - 1].x <= width) {
+    hills[hills.length - 1].x;
+  }
+  else {
+    for (let theRect of hills) {
       theRect.x -= 2;
     }
   }
 }
 
-function makeHills1(WIDTH_OF_RECTS) {
-  let time = 5;
-  let deltaTime = 0.003; 
-
-  for (let x = 0; x < width; x += WIDTH_OF_RECTS) {
-    let theHeight = noise(time) * height;
-    hills1.push(makeRect(x, theHeight, WIDTH_OF_RECTS));
+// Middle set of hills
+function makeMiddleHills(WIDTH_OF_RECTS) {
+  let time = 0;
+  let deltaTime = 0.0017; 
+  
+  for (let x = 0; x < width*2; x += WIDTH_OF_RECTS) {
+    let theHeight = noise(time) * (height*0.75);
+    middleHills.push(makeRect(x, theHeight, WIDTH_OF_RECTS));
     time += deltaTime;
   }
 }
 
-function displayHills1() {
+function displayMiddleHills() {
   // Styling
-  fill("#01260a");
-
+  fill("#2ca84b");
+  
   // Draw rects
-  for (let theRect of hills1) {
+  for (let theRect of middleHills) {
     rect(theRect.x, theRect.y, theRect.width, theRect.height);
   }
 }
 
-function moveHills1() {
-  for (let theRect of hills1) {
-    theRect.x -= 1;
+function moveMiddleHills() {
+  if (middleHills[middleHills.length - 1].x <= width) {
+    middleHills[middleHills.length - 1].x;
+  }
+  else {
+    for (let theRect of middleHills) {
+      theRect.x -= 2;
+    }
   }
 }
 
+// Back set of hills
+function makeSteepHills(WIDTH_OF_RECTS) {
+  let time = 5;
+  let deltaTime = 0.003; 
+
+  for (let x = 0; x < width*2; x += WIDTH_OF_RECTS) {
+    let theHeight = noise(time) * height;
+    steepHills.push(makeRect(x, theHeight, WIDTH_OF_RECTS));
+    time += deltaTime;
+  }
+}
+
+function displaySteepHills() {
+  // Styling
+  fill("#4d6352");
+
+  // Draw rects
+  for (let theRect of steepHills) {
+    rect(theRect.x, theRect.y, theRect.width, theRect.height);
+  }
+}
+
+function moveSteepHills() {
+  if (steepHills[steepHills.length - 1].x <= width) {
+    steepHills[steepHills.length - 1].x;
+  }
+  else {
+    for (let theRect of steepHills) {
+      theRect.x -= 1;
+    }
+  }
+}
+
+// Properties of each rectangle in hill arrays
 function makeRect(xPos, rectHeight, rectWidth) {
   aRect = {
     x: xPos,
@@ -127,25 +175,48 @@ function makeRect(xPos, rectHeight, rectWidth) {
   return aRect;
 }
 
+// Properties of sprite
 function setCharacter() {
-  character = {
-    charW: 50,
-    charX: 0,
-    charY: height - hills[0].height - 50, // Take away image height, # is placeholder
+  characterProperties = {
+    charX: 100,
+    charY: height - hills[0].height - character.height*REDUCTION + EXTRA_SPACE, 
+    charW: character.width*REDUCTION,
+    charH: character.height*REDUCTION,
   };
 }
 
 function displayCharacter() {
-  fill(0);
-  square(character.charX, character.charY, character.charW);  // Try using gif
+  character.position(characterProperties.charX, characterProperties.charY);
+  character.size(characterProperties.charW, characterProperties.charH);
 }
 
 function characterMotion() {
-  if (character.charX < width/3) {
-    // Moving character forward
-    character.charX += 2; // Little bit of trouble keeping pace with hills - look into that
+  // Make character run off screen when done
+  if (hills[hills.length - 1].x <= width && characterProperties.charX <= width) {
+    characterProperties.charX += 2;
   }
+
   // Move character along hills
-  character.charY = height - hills[i].height - character.charW;
-  i ++;
+  if (i < hills.length) {
+    characterProperties.charY = height - hills[i].height - characterProperties.charH + EXTRA_SPACE;
+    i += 1;
+  }
+}
+
+// Play background music
+function keyPressed() {
+  if (!bgMusic.isPlaying()) {
+    bgMusic.loop();
+  }
+}
+
+// Display text if music not playing
+function displayText() {
+  fill(0);
+  textAlign(CENTER);
+  textSize(40);
+
+  if (!bgMusic.isPlaying()) {
+    text("Press any key to start music", width/2, 50);
+  }
 }
