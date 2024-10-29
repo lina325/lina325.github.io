@@ -1,26 +1,35 @@
-// Project Title
+// Basic Connect 4
 // Angelina Zhu
 // Nov 8, 2024
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
-const NUM_OF_COLS = 7;
+const NUM_OF_COLS = 7;    //Maybe change it later to adjust + fill the screen
 const NUM_OF_ROWS = 6;
 let squareSize;     // Maybe change name later
 let grid;
+let turn = 0;
+let colour;
+
+let chipProperties = {
+  diameter: squareSize - 25,
+
+};
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  squareSize = width/NUM_OF_COLS;     // # of cols will always be more, thus making the smaller square 
+  squareSize = Math.floor(height/NUM_OF_ROWS);
   grid = generateGrid(NUM_OF_COLS, NUM_OF_ROWS);
 
   noStroke();
 }
 
 function draw() {
-  background(20);
+  background(100);
 
+  makeMove();
   displayBoard();
 }
 
@@ -42,9 +51,24 @@ function displayBoard() {
     for (let y = 0; y < NUM_OF_ROWS; y ++) {
       if (grid[x][y] === 0) {
         fill(255);
-        square(x*squareSize, y*squareSize, squareSize);
-        // circle(x * squareSize, y * squareSize, squareSize);
+        circle(x * squareSize, y * squareSize, chipProperties.diameter);
       }
     }
+  }
+}
+
+function makeMove() {
+  let x = Math.floor(mouseX/squareSize);
+  let y = Math.floor(mouseY/squareSize);
+
+  if (colour === "red") {
+    // grid[x][y]
+  }
+
+  if (turn % 2 === 0) {
+    colour = "red";
+  }
+  else {
+    colour = "blue";
   }
 }
