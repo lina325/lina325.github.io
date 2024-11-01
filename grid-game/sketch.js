@@ -10,9 +10,9 @@ const NUM_OF_ROWS = 6;
 let squareSize;     // Maybe change name later
 let grid;
 let turn = 0;
-let colour;
+let playerTurn = 0;
 
-let screenState = "start";
+let screenState = "player-player";
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -29,11 +29,15 @@ function draw() {
   else if (screenState === "player-player") {
     background(100);
 
-    // makeMove();
+    // playerVsPlayer();
     displayBoard();
+    checkWin();
   }
   else if (screenState === "player-comp") {     //Hopefully? Eventually?
+    background(120);
 
+    displayBoard();
+    checkWin();
   }
 }
 
@@ -60,22 +64,46 @@ function displayBoard() {
 }
 
 function mouseClicked() {
-  let x = Math.floor(mouseX/squareSize);
-
-  for (let y = NUM_OF_ROWS - 1; y > 0; y --) {
-    if (grid[x][y].state !== "filled") {
-      grid[x][y].colour = "red";
-      return "none";
-      // Return statement? Have to end it when it's true
+  if (screenState === "player-player") {
+    let x = Math.floor(mouseX/squareSize);
+  
+    if (playerTurn % 2 === 0) {
+      for (let y = NUM_OF_ROWS - 1; y > 0; y --) {
+        if (grid[x][y].state !== "filled") {
+          grid[x][y].colour = "red";
+          playerTurn ++;    // May be better way to do this without putting it twice
+          return;
+          // Find something to stop the loop but not the function
+        }
+      }
+      // May have to consider case where all are filled (maybe doesn't need additional statement tho)
+    }
+    else if (playerTurn % 2 === 1) {
+      for (let y = NUM_OF_ROWS - 1; y > 0; y --) {
+        if (grid[x][y].state === "empty") {
+          grid[x][y].colour = "blue";
+          playerTurn ++;
+          return;
+        }
+      }
+    }
+    
+    // Update grid
+    for (let x = 0; x < NUM_OF_COLS; x ++) {
+      for (let y = 0; y < NUM_OF_ROWS; y ++) {
+        if (grid[x][y].colour !== 255) {
+          grid[x][y].state = "filled";
+        }
+      }
     }
   }
-  // May have to consider case where all are filled (maybe doesn't need additional statement tho)
+}
 
-  // Update grid
+function checkWin() {
   for (let x = 0; x < NUM_OF_COLS; x ++) {
     for (let y = 0; y < NUM_OF_ROWS; y ++) {
-      if (grid[x][y].colour !== 255) {
-        grid[x][y].state = "filled";
+      if (grid[x][y].state === "filled") {
+        
       }
     }
   }
