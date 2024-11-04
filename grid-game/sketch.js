@@ -12,7 +12,12 @@ let grid;
 let turn = 0;
 let playerTurn = 0;
 
-let screenState = "player-player";
+let screenState = "start";
+
+let buttonProperties = {
+  width: 300, 
+  height: 100,
+};
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -31,27 +36,46 @@ function draw() {
 
     // playerVsPlayer();
     displayBoard();
-    checkWin();
+    // checkWin();
   }
   else if (screenState === "player-comp") {     //Hopefully? Eventually?
     background(120);
 
     displayBoard();
-    checkWin();
+    // checkWin();
   }
 }
 
 function generateGrid(cols, rows) {
   let newGrid = [];
-
+  
   for (let x = 0; x < cols; x ++) {
     newGrid.push([]);
     for (let y = 0; y < rows; y ++) {
       newGrid[x].push(chipProperties(x, y));
     }
   }
-
+  
   return newGrid;
+}
+
+function displayStartScreen() {
+  fill(0);
+  textAlign(CENTER);
+  textSize(110);
+  text("Connect 4", width/2, height/4);      // Wait what if Enha themed- (cuz 1, 2, connect-)
+
+  fill(255);
+  stroke(0);
+  rect(width/2 - buttonProperties.width/2, height/2, buttonProperties.width, buttonProperties.height);
+
+  fill(0);
+  textSize(30);
+  text("Player V.S. Player", width/2, height/2);
+
+  // if (keyIsPressed) {
+  //   screenState = "player-player";
+  // }
 }
 
 function displayBoard() {
@@ -68,22 +92,21 @@ function mouseClicked() {
     let x = Math.floor(mouseX/squareSize);
   
     if (playerTurn % 2 === 0) {
-      for (let y = NUM_OF_ROWS - 1; y > 0; y --) {
+      for (let y = NUM_OF_ROWS - 1; y >= 0; y --) {
         if (grid[x][y].state !== "filled") {
           grid[x][y].colour = "red";
           playerTurn ++;    // May be better way to do this without putting it twice
-          return;
-          // Find something to stop the loop but not the function
+          break;
         }
       }
       // May have to consider case where all are filled (maybe doesn't need additional statement tho)
     }
     else if (playerTurn % 2 === 1) {
-      for (let y = NUM_OF_ROWS - 1; y > 0; y --) {
+      for (let y = NUM_OF_ROWS - 1; y >= 0; y --) {
         if (grid[x][y].state === "empty") {
           grid[x][y].colour = "blue";
           playerTurn ++;
-          return;
+          break;
         }
       }
     }
@@ -100,13 +123,45 @@ function mouseClicked() {
 }
 
 function checkWin() {
+  let win = "false";
+  let winColour;
+
   for (let x = 0; x < NUM_OF_COLS; x ++) {
     for (let y = 0; y < NUM_OF_ROWS; y ++) {
-      if (grid[x][y].state === "filled") {
-        
+      // Check vertical
+      if (grid[x][y+4] < NUM_OF_ROWS) {
+        if (grid[x][y].state === "filled" && grid[x][y+1].state === "filled" && grid[x][y+2].state === "filled" && grid[x][y+3].state === "filled" && grid[x][y+4].state === "filled") {
+          winColour = grid[x][y].colour;
+          win = true;
+        }
+      }
+
+      // Check horizontal 
+      if (grid[x+4][y] < NUM_OF_COLS) {
+        if (grid[x][y].state === "filled" && grid[x+1][y].state === "filled" && grid[x+2][y].state === "filled" && grid[x+3][y].state === "filled" && grid[x+4][y].state === "filled") {
+          winColour = grid[x][y].colour;
+          win = true;
+        } 
+      }
+
+      // Check diagonal
+      if (grid[x+4][y+4] < NUM_OF_COLS) {
+        if (grid[x][y].state === "filled" && grid[x+1][y+1].state === "filled" && grid[x+2][y+2].state === "filled" && grid[x+3][y+3].state === "filled" && grid[x+4][y+4].state === "filled") {
+          winColour = grid[x][y].colour;
+          win = true;
+        } 
       }
     }
   }
+
+  if (win === true) {
+    announceWinner(winColour);
+  }
+}
+
+function announceWinner(winColour) {
+  text("__ won!");      // Insert variable?
+  // Buttons to play again or back to start
 }
 
 function chipProperties(x, y) {
@@ -118,10 +173,4 @@ function chipProperties(x, y) {
     state: "empty",
   };
   return chip;
-}
-
-function displayStartScreen() {
-  if (keyIsPressed) {
-    screenState = "player-player";
-  }
 }
