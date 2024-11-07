@@ -12,11 +12,11 @@ let grid;
 let turn = 0;
 let playerTurn = 0;
 
-let screenState = "player-player";
+let screenState = "start";
 
 let buttonProperties = {
   width: 300, 
-  height: 100,
+  height: 110,
 };
 
 function setup() {
@@ -39,19 +39,15 @@ function draw() {
   else if (screenState === "player-player") {
     background(100); //#fcf8eb
 
-    // playerVsPlayer();
     displayBoard();
     checkWin();
   }
-  else if (screenState === "player-comp") {     //Hopefully? Eventually?
-    background(120);
-
-    displayBoard();
-    // checkWin();
+  else if (screenState === "win") {
+    announceWinner(winColour);
   }
 }
 
-function generateGrid(cols, rows) {
+function generateGrid(cols, rows) {     // Center it?
   let newGrid = [];
   
   for (let x = 0; x < cols; x ++) {
@@ -65,22 +61,19 @@ function generateGrid(cols, rows) {
 }
 
 function displayStartScreen() {
+  background(240);
+
   fill(0);
   textAlign(CENTER);
   textSize(110);
   text("Connect 4", width/2, height/4);      // Wait what if Enha themed- (cuz 1, 2, connect-)
 
-  fill(255);
-  stroke(0);
-  rect(width/2 - buttonProperties.width/2, height/2, buttonProperties.width, buttonProperties.height);
-
-  fill(0);
   textSize(30);
-  text("Player V.S. Player", width/2, height/2);
+  text("Press space bar to start", width/2, height/2);
 
-  // if (keyIsPressed) {
-  //   screenState = "player-player";
-  // }
+  if (keyIsPressed && keyCode === 32) {
+    screenState = "player-player";
+  }
 }
 
 function displayBoard() {
@@ -132,6 +125,7 @@ function checkWin() {
 
   for (let x = 0; x < NUM_OF_COLS; x ++) {
     for (let y = 0; y < NUM_OF_ROWS; y ++) {
+      
       // Check vertical
       if (y+3 < NUM_OF_ROWS) {
         if (grid[x][y].colour === "#d10000" && grid[x][y+1].colour === "#d10000" && grid[x][y+2].colour === "#d10000" && grid[x][y+3].colour === "#d10000") {
@@ -183,7 +177,7 @@ function checkWin() {
   }
 
   if (win === true) {
-    announceWinner(winColour);
+    screenState = "win";
   }
 }
 
@@ -193,6 +187,7 @@ function announceWinner(winColour) {
   textSize(200);
   text(`${winColour} won!`, NUM_OF_COLS*squareSize/2, NUM_OF_ROWS*squareSize/2); 
 
+  rect(width/2 - buttonProperties.width);
   // Buttons to play again or back to start
 }
 
