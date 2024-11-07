@@ -98,8 +98,8 @@ function mouseClicked() {
   
     if (playerTurn % 2 === 0) {
       for (let y = NUM_OF_ROWS - 1; y >= 0; y --) {
-        if (grid[x][y].state !== "filled") {
-          grid[x][y].colour = "red"; //#d10000
+        if (grid[x][y].state === "empty") {
+          grid[x][y].colour = "#d10000"; 
           playerTurn ++;    // May be better way to do this without putting it twice
           break;
         }
@@ -108,7 +108,7 @@ function mouseClicked() {
     else if (playerTurn % 2 === 1) {
       for (let y = NUM_OF_ROWS - 1; y >= 0; y --) {
         if (grid[x][y].state === "empty") {
-          grid[x][y].colour = "blue"; //#1100a6
+          grid[x][y].colour = "#1100a6"; 
           playerTurn ++;
           break;
         }
@@ -133,25 +133,49 @@ function checkWin() {
   for (let x = 0; x < NUM_OF_COLS; x ++) {
     for (let y = 0; y < NUM_OF_ROWS; y ++) {
       // Check vertical
-      if (y+4 < NUM_OF_ROWS) {
-        if (grid[x][y].state === "filled" && grid[x][y+1].state === "filled" && grid[x][y+2].state === "filled" && grid[x][y+3].state === "filled" && grid[x][y+4].state === "filled") {
-          winColour = grid[x][y].colour;
+      if (y+3 < NUM_OF_ROWS) {
+        if (grid[x][y].colour === "#d10000" && grid[x][y+1].colour === "#d10000" && grid[x][y+2].colour === "#d10000" && grid[x][y+3].colour === "#d10000") {
+          winColour = "Red";
+          win = true;
+        }
+        else if (grid[x][y].colour === "#1100a6" && grid[x][y+1].colour === "#1100a6" && grid[x][y+2].colour === "#1100a6" && grid[x][y+3].colour === "#1100a6") {
+          winColour = "Blue";
           win = true;
         }
       }
 
       // Check horizontal 
-      if (x+4 < NUM_OF_COLS) {
-        if (grid[x][y].state === "filled" && grid[x+1][y].state === "filled" && grid[x+2][y].state === "filled" && grid[x+3][y].state === "filled" && grid[x+4][y].state === "filled") {
+      if (x+3 < NUM_OF_COLS) {
+        if (grid[x][y].colour === "#d10000" && grid[x+1][y].colour === "#d10000" && grid[x+2][y].colour === "#d10000" && grid[x+3][y].colour === "#d10000") {
+          winColour = grid[x][y].colour;
+          win = true;
+        } 
+        else if (grid[x][y].colour === "#1100a6" && grid[x+1][y].colour === "#1100a6" && grid[x+2][y].colour === "#1100a6" && grid[x+3][y].colour === "#1100a6") {
           winColour = grid[x][y].colour;
           win = true;
         } 
       }
 
-      // Check diagonal
-      if (x+4 < NUM_OF_COLS && y+4 < NUM_OF_ROWS) {
-        if (grid[x][y].state === "filled" && grid[x+1][y+1].state === "filled" && grid[x+2][y+2].state === "filled" && grid[x+3][y+3].state === "filled" && grid[x+4][y+4].state === "filled") {
-          winColour = grid[x][y].colour;
+      // Check left to right diagonal
+      if (x+3 < NUM_OF_COLS && y+3 < NUM_OF_ROWS) {
+        if (grid[x][y].colour === "#d10000" && grid[x+1][y+1].colour === "#d10000" && grid[x+2][y+2].colour === "#d10000" && grid[x+3][y+3].colour === "#d10000") {
+          winColour = "Red";
+          win = true;
+        } 
+        else if (grid[x][y].colour === "#1100a6" && grid[x+1][y+1].colour === "#1100a6" && grid[x+2][y+2].colour === "#1100a6" && grid[x+3][y+3].colour === "#1100a6") {
+          winColour = "Blue";
+          win = true;
+        } 
+      }
+
+      // Check right to left diagonal
+      if (x-3 < NUM_OF_COLS && y-3 < NUM_OF_ROWS) {
+        if (grid[x][y].colour === "#d10000" && grid[x-1][y-1].colour === "#d10000" && grid[x-2][y-2].colour === "#d10000" && grid[x-3][y-3].colour === "#d10000") {
+          winColour = "Red";
+          win = true;
+        } 
+        else if (grid[x][y].colour === "#1100a6" && grid[x-1][y-1].colour === "#1100a6" && grid[x-2][y-2].colour === "#1100a6" && grid[x-3][y-3].colour === "#1100a6") {
+          winColour = "Blue";
           win = true;
         } 
       }
