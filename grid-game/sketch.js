@@ -39,6 +39,13 @@ function setup() {
   grid = generateGrid(NUM_OF_COLS, NUM_OF_ROWS);
 
   noStroke();
+
+  for (let x = 0; x < NUM_OF_COLS; x ++) {
+    for (let y = 0; y < NUM_OF_ROWS; y ++) {
+      circleMask.circle(x * squareSize + squareSize/2, y * squareSize + squareSize/2, grid[x][y].diameter);
+    }
+  }
+  blueChip.mask(circleMask);
 }
 
 function draw() {
@@ -59,13 +66,16 @@ function draw() {
   }
 }
 
-function generateGrid(cols, rows) {     // Center it?
+function generateGrid(cols, rows) { 
   let newGrid = [];
   
   for (let x = 0; x < cols; x ++) {
     newGrid.push([]);
     for (let y = 0; y < rows; y ++) {
       newGrid[x].push(chipProperties(x, y));
+
+      circleMask = createGraphics(squareSize, squareSize);
+      circleMask.fill(100);
     }
   }
   
@@ -89,19 +99,21 @@ function displayStartScreen() {
 }
 
 function displayBoard() {
-  noStroke();
-
   for (let x = 0; x < NUM_OF_COLS; x ++) {
     for (let y = 0; y < NUM_OF_ROWS; y ++) {
       fill(grid[x][y].colour);
       circle(x * squareSize + squareSize/2, y * squareSize + squareSize/2, grid[x][y].diameter);
+      
+      if (grid[x][y].img !== 255) {
+        image(grid[x][y].img, x*squareSize, y*squareSize, squareSize, squareSize);
+      }
     }
   }
 
   // Buttons to play again or back to start
   // fill(255);
   // stroke(2);
-  // rect(width/2 - buttonProperties.width/2, (height/3)*2 - buttonProperties.height, buttonProperties.width, buttonProperties.height);
+  // rect(width - (width - NUM_OF_COLS*squareSize)/2, height/3 * 2, buttonProperties.width, buttonProperties.height);
 }
 
 function mouseClicked() {
@@ -121,6 +133,7 @@ function mouseClicked() {
       for (let y = NUM_OF_ROWS - 1; y >= 0; y --) {
         if (grid[x][y].state === "empty") {
           grid[x][y].colour = "#1100a6"; 
+          grid[x][y].img = blueChip;
           playerTurn ++;
           break;
         }
@@ -206,7 +219,7 @@ function checkWin() {
     screenState = "win";
   }
   else if (win !== true && allFilled) {
-    screenState = "tie"
+    screenState = "tie";
   }
 }
 
@@ -231,6 +244,7 @@ function chipProperties(x, y) {
     diameter: squareSize - squareSize*0.2, 
     colour: 255,
     state: "empty",
+    img: 255,
   };
   return chip;
 }
