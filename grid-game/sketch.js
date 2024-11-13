@@ -7,7 +7,7 @@
 
 // Food idea credit to my mom; Checking logic for check-win system help from my dad
 
-const NUM_OF_COLS = 7;    //Maybe change it later to adjust + fill the screen
+const NUM_OF_COLS = 7; 
 const NUM_OF_ROWS = 6;
 let squareSize;
 let grid;
@@ -30,6 +30,7 @@ let buttonProperties = {
 function preload() {
   blueChip = loadImage("blue-chip.png");
   redChip = loadImage("red-chip.png");
+  // redChip = loadImage("image.png");
 }
 
 function setup() {
@@ -57,7 +58,7 @@ function draw() {
   if (screenState === "start") {
     displayStartScreen();
   }
-  else if (screenState === "player-player") {
+  else if (screenState === "player-player") { //Maybe try making a choose colours thing? 
     background(100); //#fcf8eb Maybe change
 
     displayBoard();
@@ -88,7 +89,7 @@ function generateGrid(cols, rows) {
 }
 
 function displayStartScreen() {
-  background(240); //Maybe add/replace with image?
+  background(240);
 
   fill(0);
   textAlign(CENTER);
@@ -115,10 +116,23 @@ function displayBoard() {
     }
   }
 
-  // Buttons to play again or back to start
-  // fill(255);
-  // stroke(2);
-  // rect(width - (width - NUM_OF_COLS*squareSize)/2, height/3 * 2, buttonProperties.width, buttonProperties.height);
+  displayButtons();
+  displayTurn();
+}
+
+function displayButtons() {
+  fill(200);
+  rect(width - (width - NUM_OF_COLS*squareSize)/2 - buttonProperties.width/2, height/3 * 2 - buttonProperties.height/2, buttonProperties.width, buttonProperties.height);
+
+  fill(0);
+  textSize(40);
+  text("Back", width - (width - NUM_OF_COLS*squareSize)/2, height/3 * 2);
+}
+
+function displayTurn() {
+  if (playerTurn % 2 === 0) {
+    image(redChip, width - (width - NUM_OF_COLS*squareSize)/2, height/3);
+  }
 }
 
 function mouseClicked() {
@@ -128,17 +142,15 @@ function mouseClicked() {
     if (playerTurn % 2 === 0) {
       for (let y = NUM_OF_ROWS - 1; y >= 0; y --) {
         if (grid[x][y].state === "empty") {
-          grid[x][y].colour = "#d10000"; 
           grid[x][y].img = redChip;
           playerTurn ++;
           break;
         }
       }
     }
-    else if (playerTurn % 2 === 1) {
+    else {
       for (let y = NUM_OF_ROWS - 1; y >= 0; y --) {
         if (grid[x][y].state === "empty") {
-          grid[x][y].colour = "#1100a6"; 
           grid[x][y].img = blueChip;
           playerTurn ++;
           break;
@@ -163,23 +175,23 @@ function checkWin() {
       
       // Check vertical
       if (y+3 < NUM_OF_ROWS) {
-        if (grid[x][y].colour === "#d10000" && grid[x][y+1].colour === "#d10000" && grid[x][y+2].colour === "#d10000" && grid[x][y+3].colour === "#d10000") {
+        if (grid[x][y].img === redChip && grid[x][y+1].img === redChip && grid[x][y+2].img === redChip && grid[x][y+3].img === redChip) {
           winColour = "Red";
           win = true;
         }
-        else if (grid[x][y].colour === "#1100a6" && grid[x][y+1].colour === "#1100a6" && grid[x][y+2].colour === "#1100a6" && grid[x][y+3].colour === "#1100a6") {
+        else if (grid[x][y].img === blueChip && grid[x][y+1].img === blueChip && grid[x][y+2].img === blueChip && grid[x][y+3].img === blueChip) {
           winColour = "Blue";
           win = true;
         }
       }
 
-      // Check horizontal 
+      // Check horizontal
       if (x+3 < NUM_OF_COLS) {
-        if (grid[x][y].colour === "#d10000" && grid[x+1][y].colour === "#d10000" && grid[x+2][y].colour === "#d10000" && grid[x+3][y].colour === "#d10000") {
+        if (grid[x][y].img === redChip && grid[x+1][y].img === redChip && grid[x+2][y].img === redChip && grid[x+3][y].img === redChip) {
           winColour = "Red";
           win = true;
         } 
-        else if (grid[x][y].colour === "#1100a6" && grid[x+1][y].colour === "#1100a6" && grid[x+2][y].colour === "#1100a6" && grid[x+3][y].colour === "#1100a6") {
+        else if (grid[x][y].img === blueChip && grid[x+1][y].img === blueChip && grid[x+2][y].img === blueChip && grid[x+3][y].img === blueChip) {
           winColour = "Blue";
           win = true;
         } 
@@ -187,11 +199,11 @@ function checkWin() {
 
       // Check left to right diagonal
       if (x+3 < NUM_OF_COLS && y+3 < NUM_OF_ROWS) {
-        if (grid[x][y].colour === "#d10000" && grid[x+1][y+1].colour === "#d10000" && grid[x+2][y+2].colour === "#d10000" && grid[x+3][y+3].colour === "#d10000") {
+        if (grid[x][y].img === redChip && grid[x+1][y+1].img === redChip && grid[x+2][y+2].img === redChip && grid[x+3][y+3].img === redChip) {
           winColour = "Red";
           win = true;
         } 
-        else if (grid[x][y].colour === "#1100a6" && grid[x+1][y+1].colour === "#1100a6" && grid[x+2][y+2].colour === "#1100a6" && grid[x+3][y+3].colour === "#1100a6") {
+        else if (grid[x][y].img === blueChip && grid[x+1][y+1].img === blueChip && grid[x+2][y+2].img === blueChip && grid[x+3][y+3].img === blueChip) {
           winColour = "Blue";
           win = true;
         } 
@@ -199,11 +211,11 @@ function checkWin() {
 
       // Check right to left diagonal
       if (x-3 >= 0 && y+3 < NUM_OF_ROWS) {
-        if (grid[x][y].colour === "#d10000" && grid[x-1][y+1].colour === "#d10000" && grid[x-2][y+2].colour === "#d10000" && grid[x-3][y+3].colour === "#d10000") {
+        if (grid[x][y].img === redChip && grid[x-1][y+1].img === redChip && grid[x-2][y+2].img === redChip && grid[x-3][y+3].img === redChip) {
           winColour = "Red";
           win = true;
         } 
-        else if (grid[x][y].colour === "#1100a6" && grid[x-1][y+1].colour === "#1100a6" && grid[x-2][y+2].colour === "#1100a6" && grid[x-3][y+3].colour === "#1100a6") {
+        else if (grid[x][y].img === blueChip && grid[x-1][y+1].img === blueChip && grid[x-2][y+2].img === blueChip && grid[x-3][y+3].img === blueChip) {
           winColour = "Blue";
           win = true;
         } 
@@ -212,7 +224,7 @@ function checkWin() {
   }
 
   if (win === true) {
-    screenState = "win";
+    screenState = "win"; //May be able to end it if win is true cuz if it is you don't need to check for a tie
   }
   else if (win !== true && allFilled) {
     screenState = "tie";
@@ -247,7 +259,7 @@ function chipProperties(x, y) {
   let chip = {
     x: x, 
     y: y,
-    diameter: squareSize - squareSize*0.2, 
+    diameter: squareSize - squareSize*0.15,
     colour: 255,
     state: "empty",
     img: 255,
