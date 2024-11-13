@@ -5,6 +5,8 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
+// Food idea credit to my mom; Checking logic for check-win system help from my dad
+
 const NUM_OF_COLS = 7;    //Maybe change it later to adjust + fill the screen
 const NUM_OF_ROWS = 6;
 let squareSize;
@@ -18,6 +20,7 @@ let win = false;
 let allFilled = false;
 let circleMask;
 let blueChip;
+let redChip;
 
 let buttonProperties = {
   width: 300, 
@@ -26,6 +29,7 @@ let buttonProperties = {
 
 function preload() {
   blueChip = loadImage("blue-chip.png");
+  redChip = loadImage("red-chip.png");
 }
 
 function setup() {
@@ -46,6 +50,7 @@ function setup() {
     }
   }
   blueChip.mask(circleMask);
+  redChip.mask(circleMask);
 }
 
 function draw() {
@@ -88,7 +93,7 @@ function displayStartScreen() {
   fill(0);
   textAlign(CENTER);
   textSize(110);
-  text("Connect 4", width/2, height/4);      // Wait what if Enha themed- (cuz 1, 2, connect-)
+  text("Connect 4", width/2, height/4); 
 
   textSize(30);
   text("Press space bar to start", width/2, height/2);
@@ -124,6 +129,7 @@ function mouseClicked() {
       for (let y = NUM_OF_ROWS - 1; y >= 0; y --) {
         if (grid[x][y].state === "empty") {
           grid[x][y].colour = "#d10000"; 
+          grid[x][y].img = redChip;
           playerTurn ++;
           break;
         }
@@ -143,7 +149,7 @@ function mouseClicked() {
     // Update grid
     for (let x = 0; x < NUM_OF_COLS; x ++) {
       for (let y = 0; y < NUM_OF_ROWS; y ++) {
-        if (grid[x][y].colour !== 255) {
+        if (grid[x][y].img !== 255) {
           grid[x][y].state = "filled";
         }
       }
@@ -192,7 +198,7 @@ function checkWin() {
       }
 
       // Check right to left diagonal
-      if (x-3 > NUM_OF_COLS && y+3 < NUM_OF_ROWS) {
+      if (x-3 >= 0 && y+3 < NUM_OF_ROWS) {
         if (grid[x][y].colour === "#d10000" && grid[x-1][y+1].colour === "#d10000" && grid[x-2][y+2].colour === "#d10000" && grid[x-3][y+3].colour === "#d10000") {
           winColour = "Red";
           win = true;
@@ -205,6 +211,13 @@ function checkWin() {
     }
   }
 
+  if (win === true) {
+    screenState = "win";
+  }
+  else if (win !== true && allFilled) {
+    screenState = "tie";
+  }
+
   // Check for tie
   for (let x = 0; x < NUM_OF_COLS; x ++) {
     for (let y = 0; y < NUM_OF_ROWS; y ++) {
@@ -214,13 +227,6 @@ function checkWin() {
     }
   }
   allFilled = true;
-
-  if (win === true) {
-    screenState = "win";
-  }
-  else if (win !== true && allFilled) {
-    screenState = "tie";
-  }
 }
 
 function announceWinner(winColour) {
