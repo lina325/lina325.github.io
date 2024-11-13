@@ -15,6 +15,8 @@
 - [Game of Life](game-of-life)
 - [Rectangular Grid](rectangle-grid)
 - [Character in Grid](character-grid)
+- [Platformer from Text File](15-platformer)
+- [Walker OOP](walker-oop)
 
 ## Projects
 - [Interactive Scene](interactive-scene)
