@@ -17,6 +17,7 @@
 - [Character in Grid](character-grid)
 - [Platformer from Text File](15-platformer)
 - [Walker OOP](walker-oop)
+- [Walker OOP Array](walker-oop-array)
 
 ## Projects
 - [Interactive Scene](interactive-scene)
