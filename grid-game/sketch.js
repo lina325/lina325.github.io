@@ -13,6 +13,8 @@ let squareSize;
 let grid;
 let turn = 0;
 let playerTurn = 0;
+let player1;
+let player2;
 
 let screenState = "start";
 let winColour;
@@ -22,7 +24,7 @@ let circleMask;
 let blueChip;
 let redChip;
 
-let buttonProperties = {
+const BUTTON_PROPERTIES = {
   width: 300, 
   height: 110,
 };
@@ -47,7 +49,7 @@ function setup() {
 
   for (let x = 0; x < NUM_OF_COLS; x ++) {
     for (let y = 0; y < NUM_OF_ROWS; y ++) {
-      circleMask.circle(x * squareSize + squareSize/2, y * squareSize + squareSize/2, grid[x][y].diameter);
+      circleMask.circle(x * squareSize + squareSize/2, y * squareSize + squareSize/2, grid[x][y].diameter); //Maybe don't need to apply mask to each spot? Also then why does it work on the displayTurn function haha
     }
   }
   blueChip.mask(circleMask);
@@ -57,6 +59,9 @@ function setup() {
 function draw() {
   if (screenState === "start") {
     displayStartScreen();
+  }
+  else if (screenState === "select") {
+    displaySelectionScreen();
   }
   else if (screenState === "player-player") { //Maybe try making a choose colours thing? 
     background(100); //#fcf8eb Maybe change
@@ -84,7 +89,6 @@ function generateGrid(cols, rows) {
       circleMask.fill(100);
     }
   }
-  
   return newGrid;
 }
 
@@ -100,8 +104,21 @@ function displayStartScreen() {
   text("Press space bar to start", width/2, height/2);
 
   if (keyIsPressed && keyCode === 32) {
-    screenState = "player-player";
+    screenState = "select";
   }
+}
+
+function displaySelectionScreen() {
+  background(240);
+
+  text("Choose 1st player colour", width/2, height/12);
+
+  // Find images first haha 
+  image(redChip, width/6, height/3, squareSize, squareSize);
+  image(blueChip, width/6 * 2, height/3, squareSize, squareSize);
+  
+
+  player2 = blueChip;
 }
 
 function displayBoard() {
@@ -116,33 +133,54 @@ function displayBoard() {
     }
   }
 
-  displayButtons();
+  displayButton();
   displayTurn();
+  // displayScore();
 }
 
-function displayButtons() {
+function displayButton() {
   fill(200);
-  rect(width - (width - NUM_OF_COLS*squareSize)/2 - buttonProperties.width/2, height/3 * 2 - buttonProperties.height/2, buttonProperties.width, buttonProperties.height);
+  rect(width - (width - NUM_OF_COLS*squareSize)/2 - BUTTON_PROPERTIES.width/2, height/4 * 3 - BUTTON_PROPERTIES.height/2, BUTTON_PROPERTIES.width, BUTTON_PROPERTIES.height);
 
   fill(0);
   textSize(40);
-  text("Back", width - (width - NUM_OF_COLS*squareSize)/2, height/3 * 2);
-}
+  text("Back", width - (width - NUM_OF_COLS*squareSize)/2, height/4 * 3);
 
-function displayTurn() {
-  if (playerTurn % 2 === 0) {
-    image(redChip, width - (width - NUM_OF_COLS*squareSize)/2, height/3);
+  if (mouseX >= width - (width - NUM_OF_COLS*squareSize)/2 - BUTTON_PROPERTIES.width/2 && mouseX < width - (width - NUM_OF_COLS*squareSize)/2 + BUTTON_PROPERTIES.width/2 && mouseY > height/4 * 3 - BUTTON_PROPERTIES.height/2 && mouseY < height/4 * 3 + BUTTON_PROPERTIES.height/2 && mouseIsPressed) {
+    screenState = "start";
   }
 }
 
+function displayTurn() {
+  // fill(0);
+  text("Player:", width - (width - NUM_OF_COLS*squareSize)/2, height/4);
+
+  if (playerTurn % 2 === 0) {
+    image(redChip, width - (width - NUM_OF_COLS*squareSize)/2 - squareSize/2, height/4 + 20, squareSize, squareSize);
+  }
+  else {
+    image(blueChip, width - (width - NUM_OF_COLS*squareSize)/2 - squareSize/2, height/4 + 20, squareSize, squareSize);
+  }
+}
+
+function displayScore() {
+
+}
+
 function mouseClicked() {
+  if (screenState === "select") {
+    if (clickedInCircle(mouseX, mouseY)) { //Need to check which one is clicked..
+      player1 = redChip;
+    }
+  }
+
   if (screenState === "player-player") {
     let x = Math.floor(mouseX/squareSize);
   
     if (playerTurn % 2 === 0) {
       for (let y = NUM_OF_ROWS - 1; y >= 0; y --) {
         if (grid[x][y].state === "empty") {
-          grid[x][y].img = redChip;
+          grid[x][y].img = player1;
           playerTurn ++;
           break;
         }
@@ -151,7 +189,7 @@ function mouseClicked() {
     else {
       for (let y = NUM_OF_ROWS - 1; y >= 0; y --) {
         if (grid[x][y].state === "empty") {
-          grid[x][y].img = blueChip;
+          grid[x][y].img = player2;
           playerTurn ++;
           break;
         }
@@ -166,6 +204,16 @@ function mouseClicked() {
         }
       }
     }
+  }
+}
+
+function clickedInCircle(x, y) {
+  let distFromCenter = dist(x, y, width/6, height/3);
+  if (distFromCenter < squareSize/2) {
+    return true;
+  }
+  else {
+    return false;
   }
 }
 
