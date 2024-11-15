@@ -3,9 +3,14 @@
 // Nov 8, 2024
 //
 // Extra for Experts:
-// Clipping images + 
+// Clipping images + ?
 
 // Checking logic for check-win system help from my dad
+// Image credits: https://www.youtube.com/channel/UCArLZtok93cO5R9RI4_Y5Jw (Blue chip)
+// https://www.reddit.com/r/kpop/comments/1dit3dz/stray_kids_ate_logo_teaser_image/ (Red chip)
+// https://ca.pinterest.com/pin/36310340742061984/ (Green chip)
+// https://www.soompi.com/article/816817wpp/fantagios-new-boy-group-astro-reveals-first-teaser-and-logo (Yellow chip)
+
 
 const NUM_OF_COLS = 7; 
 const NUM_OF_ROWS = 6;
