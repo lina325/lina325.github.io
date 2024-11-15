@@ -3,16 +3,16 @@
 // Nov 8, 2024
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// Clipping images + 
 
-// Food idea credit to my mom; Checking logic for check-win system help from my dad
+// Checking logic for check-win system help from my dad
 
 const NUM_OF_COLS = 7; 
 const NUM_OF_ROWS = 6;
 let squareSize;
 let grid;
-let turn = 0;
 let playerTurn = 0;
+let selectingPlayer = 1;
 let player1;
 let player2;
 
@@ -20,9 +20,12 @@ let screenState = "start";
 let winColour;
 let win = false;
 let allFilled = false;
+
 let circleMask;
 let blueChip;
 let redChip;
+let greenChip;
+let yellowChip;
 
 const BUTTON_PROPERTIES = {
   width: 300, 
@@ -32,48 +35,58 @@ const BUTTON_PROPERTIES = {
 function preload() {
   blueChip = loadImage("blue-chip.png");
   redChip = loadImage("red-chip.png");
-  // redChip = loadImage("image.png");
+  greenChip = loadImage("green-chip.png");
+  yellowChip = loadImage("yellow-chip.png");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  if (windowWidth > windowHeight) {
-    squareSize = Math.floor(height/NUM_OF_ROWS);
-  }
-  else {
-    squareSize = Math.floor(width/NUM_OF_COLS);
-  }
+
+  squareSize = Math.floor(height/NUM_OF_ROWS);
   grid = generateGrid(NUM_OF_COLS, NUM_OF_ROWS);
 
-  noStroke();
-
+  // Put mask on images
   for (let x = 0; x < NUM_OF_COLS; x ++) {
     for (let y = 0; y < NUM_OF_ROWS; y ++) {
-      circleMask.circle(x * squareSize + squareSize/2, y * squareSize + squareSize/2, grid[x][y].diameter); //Maybe don't need to apply mask to each spot? Also then why does it work on the displayTurn function haha
+      circleMask.circle(x * squareSize + squareSize/2, y * squareSize + squareSize/2, grid[x][y].diameter); 
     }
   }
   blueChip.mask(circleMask);
   redChip.mask(circleMask);
+  greenChip.mask(circleMask);
+  yellowChip.mask(circleMask);
 }
 
 function draw() {
   if (screenState === "start") {
+    background(240);
+
     displayStartScreen();
   }
   else if (screenState === "select") {
+    background(240);
+
     displaySelectionScreen();
   }
-  else if (screenState === "player-player") { //Maybe try making a choose colours thing? 
-    background(100); //#fcf8eb Maybe change
+  else if (screenState === "player-player") { 
+    win = false;
+    background(150); 
 
     displayBoard();
+    displayTurn();
     checkWin();
   }
   else if (screenState === "win") {
+    background(150);
+
+    displayBoard();
     announceWinner(winColour);
   }
   else if (screenState === "tie") {
-    tie();
+    background(150);
+
+    displayBoard();
+    announceTie();
   }
 }
 
@@ -93,8 +106,6 @@ function generateGrid(cols, rows) {
 }
 
 function displayStartScreen() {
-  background(240);
-
   fill(0);
   textAlign(CENTER);
   textSize(110);
@@ -109,19 +120,64 @@ function displayStartScreen() {
 }
 
 function displaySelectionScreen() {
-  background(240);
+  noStroke();
+  fill(0);
+  textSize(45);
 
-  text("Choose 1st player colour", width/2, height/12);
+  if (selectingPlayer === 1) {
+    text("Choose 1st player colour", width/2, height/8);
+  }
+  else {
+    text("Choose 2nd player colour", width/2, height/8);
+  }
 
-  // Find images first haha 
-  image(redChip, width/6, height/3, squareSize, squareSize);
-  image(blueChip, width/6 * 2, height/3, squareSize, squareSize);
+  // Display images 
+  image(redChip, width/8 - squareSize/2, height/2 - squareSize/2, squareSize, squareSize);
+  image(blueChip, width/8 * 3 - squareSize/2, height/2 - squareSize/2, squareSize, squareSize);
+  image(greenChip, width/8 * 5 - squareSize/2, height/2 - squareSize/2, squareSize, squareSize);
+  image(yellowChip, width/8 * 7 - squareSize/2, height/2 - squareSize/2, squareSize, squareSize);
   
 
-  player2 = blueChip;
+  // Display box if mouse is hovering over 
+
+  // Red
+  if (mouseX > width/8 - squareSize/2 && mouseX < width/8 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
+    stroke(2);
+    fill(0, 0, 0, 1);
+    square(width/8 - squareSize/2, height/2 - squareSize/2, squareSize);
+  }
+
+  // Blue
+  else if (mouseX > width/8 * 3 - squareSize/2 && mouseX < width/8 * 3 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
+    stroke(2);
+    fill(0, 0, 0, 1);
+    square(width/8 * 3 - squareSize/2, height/2 - squareSize/2, squareSize);
+  }
+
+  // Green
+  else if (mouseX > width/8 * 5 - squareSize/2 && mouseX < width/8 * 5 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
+    stroke(2);
+    fill(0, 0, 0, 1);
+    square(width/8 * 5 - squareSize/2, height/2 - squareSize/2, squareSize);
+  }
+
+  // Yellow
+  else if (mouseX > width/8 * 7 - squareSize/2 && mouseX < width/8 * 7 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
+    stroke(2);
+    fill(0, 0, 0, 1);
+    square(width/8 * 7 - squareSize/2, height/2 - squareSize/2, squareSize);
+  }
+
+
+  // Check if both players have selected
+  if (selectingPlayer === 3) {
+    screenState = "player-player";
+  }
 }
 
 function displayBoard() {
+  noStroke();
+
   for (let x = 0; x < NUM_OF_COLS; x ++) {
     for (let y = 0; y < NUM_OF_ROWS; y ++) {
       fill(grid[x][y].colour);
@@ -134,8 +190,6 @@ function displayBoard() {
   }
 
   displayButton();
-  displayTurn();
-  // displayScore();
 }
 
 function displayButton() {
@@ -144,39 +198,90 @@ function displayButton() {
 
   fill(0);
   textSize(40);
-  text("Back", width - (width - NUM_OF_COLS*squareSize)/2, height/4 * 3);
 
-  if (mouseX >= width - (width - NUM_OF_COLS*squareSize)/2 - BUTTON_PROPERTIES.width/2 && mouseX < width - (width - NUM_OF_COLS*squareSize)/2 + BUTTON_PROPERTIES.width/2 && mouseY > height/4 * 3 - BUTTON_PROPERTIES.height/2 && mouseY < height/4 * 3 + BUTTON_PROPERTIES.height/2 && mouseIsPressed) {
-    screenState = "start";
+  if (screenState === "win" || screenState === "tie") {
+    text("Replay", width - (width - NUM_OF_COLS*squareSize)/2, height/4 * 3 + 20);
   }
+  else {
+    text("Back", width - (width - NUM_OF_COLS*squareSize)/2, height/4 * 3 + 20);
+  }
+
+  // If button is pressed, go back to start screen + reset
+  if (mouseX >= width - (width - NUM_OF_COLS*squareSize)/2 - BUTTON_PROPERTIES.width/2 && mouseX < width - (width - NUM_OF_COLS*squareSize)/2 + BUTTON_PROPERTIES.width/2 && mouseY > height/4 * 3 - BUTTON_PROPERTIES.height/2 && mouseY < height/4 * 3 + BUTTON_PROPERTIES.height/2 && mouseIsPressed) {
+    grid = generateGrid(NUM_OF_COLS, NUM_OF_ROWS);
+    selectingPlayer = 0;
+    playerTurn = 0;
+    screenState = "select";
+
+  }
+
 }
 
 function displayTurn() {
-  // fill(0);
   text("Player:", width - (width - NUM_OF_COLS*squareSize)/2, height/4);
 
   if (playerTurn % 2 === 0) {
-    image(redChip, width - (width - NUM_OF_COLS*squareSize)/2 - squareSize/2, height/4 + 20, squareSize, squareSize);
+    image(player1, width - (width - NUM_OF_COLS*squareSize)/2 - squareSize/2, height/4 + 20, squareSize, squareSize);
   }
   else {
-    image(blueChip, width - (width - NUM_OF_COLS*squareSize)/2 - squareSize/2, height/4 + 20, squareSize, squareSize);
+    image(player2, width - (width - NUM_OF_COLS*squareSize)/2 - squareSize/2, height/4 + 20, squareSize, squareSize);
   }
-}
-
-function displayScore() {
-
 }
 
 function mouseClicked() {
+
+  // Selecting screen
   if (screenState === "select") {
-    if (clickedInCircle(mouseX, mouseY)) { //Need to check which one is clicked..
-      player1 = redChip;
+
+    // Red chip
+    if (mouseX > width/8 - squareSize/2 && mouseX < width/8 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
+      if (selectingPlayer === 1) {
+        player1 = redChip;
+      }
+      else {
+        player2 = redChip;
+      }
     }
+
+    // Blue chip
+    else if (mouseX > width/8 * 3 - squareSize/2 && mouseX < width/8 * 3 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
+      if (selectingPlayer === 1) {
+        player1 = blueChip;
+      }
+      else {
+        player2 = blueChip;
+      }
+    }
+
+    // Green chip
+    else if (mouseX > width/8 * 5 - squareSize/2 && mouseX < width/8 * 5 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
+      if (selectingPlayer === 1) {
+        player1 = greenChip;
+      }
+      else {
+        player2 = greenChip;
+      }
+    }
+
+    // Yellow chip
+    else if (mouseX > width/8 * 7 - squareSize/2 && mouseX < width/8 * 7 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
+      if (selectingPlayer === 1) {
+        player1 = yellowChip;
+      }
+      else {
+        player2 = yellowChip;
+      }
+    }
+
+    selectingPlayer ++;
   }
 
+
+  // Gameplay/Placing chips
   if (screenState === "player-player") {
     let x = Math.floor(mouseX/squareSize);
   
+    // Player 1
     if (playerTurn % 2 === 0) {
       for (let y = NUM_OF_ROWS - 1; y >= 0; y --) {
         if (grid[x][y].state === "empty") {
@@ -186,6 +291,8 @@ function mouseClicked() {
         }
       }
     }
+
+    // Player 2
     else {
       for (let y = NUM_OF_ROWS - 1; y >= 0; y --) {
         if (grid[x][y].state === "empty") {
@@ -207,16 +314,6 @@ function mouseClicked() {
   }
 }
 
-function clickedInCircle(x, y) {
-  let distFromCenter = dist(x, y, width/6, height/3);
-  if (distFromCenter < squareSize/2) {
-    return true;
-  }
-  else {
-    return false;
-  }
-}
-
 function checkWin() {
   for (let x = 0; x < NUM_OF_COLS; x ++) {
     for (let y = 0; y < NUM_OF_ROWS; y ++) {
@@ -231,6 +328,14 @@ function checkWin() {
           winColour = "Blue";
           win = true;
         }
+        else if (grid[x][y].img === greenChip && grid[x][y+1].img === greenChip && grid[x][y+2].img === greenChip && grid[x][y+3].img === greenChip) {
+          winColour = "Green";
+          win = true;
+        }
+        else if (grid[x][y].img === yellowChip && grid[x][y+1].img === yellowChip && grid[x][y+2].img === yellowChip && grid[x][y+3].img === yellowChip) {
+          winColour = "Yellow";
+          win = true;
+        }
       }
 
       // Check horizontal
@@ -243,6 +348,14 @@ function checkWin() {
           winColour = "Blue";
           win = true;
         } 
+        else if (grid[x][y].img === greenChip && grid[x+1][y].img === greenChip && grid[x+2][y].img === greenChip && grid[x+3][y].img === greenChip) {
+          winColour = "Green";
+          win = true;
+        }
+        else if (grid[x][y].img === yellowChip && grid[x+1][y].img === yellowChip && grid[x+2][y].img === yellowChip && grid[x+3][y].img === yellowChip) {
+          winColour = "Yellow";
+          win = true;
+        }
       }
 
       // Check left to right diagonal
@@ -255,6 +368,14 @@ function checkWin() {
           winColour = "Blue";
           win = true;
         } 
+        else if (grid[x][y].img === greenChip && grid[x+1][y+1].img === greenChip && grid[x+2][y+2].img === greenChip && grid[x+3][y+3].img === greenChip) {
+          winColour = "Green";
+          win = true;
+        }
+        else if (grid[x][y].img === yellowChip && grid[x+1][y+1].img === yellowChip && grid[x+2][y+2].img === yellowChip && grid[x+3][y+3].img === yellowChip) {
+          winColour = "Yellow";
+          win = true;
+        }
       }
 
       // Check right to left diagonal
@@ -266,13 +387,22 @@ function checkWin() {
         else if (grid[x][y].img === blueChip && grid[x-1][y+1].img === blueChip && grid[x-2][y+2].img === blueChip && grid[x-3][y+3].img === blueChip) {
           winColour = "Blue";
           win = true;
-        } 
+        }
+        else if (grid[x][y].img === greenChip && grid[x=1][y+1].img === greenChip && grid[x=2][y+2].img === greenChip && grid[x=3][y+3].img === greenChip) {
+          winColour = "Green";
+          win = true;
+        }
+        else if (grid[x][y].img === yellowChip && grid[x=1][y+1].img === yellowChip && grid[x=2][y+2].img === yellowChip && grid[x=3][y+3].img === yellowChip) {
+          winColour = "Yellow";
+          win = true;
+        }
       }
     }
   }
 
   if (win === true) {
-    screenState = "win"; //May be able to end it if win is true cuz if it is you don't need to check for a tie
+    screenState = "win";
+    return;
   }
   else if (win !== true && allFilled) {
     screenState = "tie";
@@ -296,7 +426,7 @@ function announceWinner(winColour) {
   text(`${winColour} wins!`, width - (width - NUM_OF_COLS*squareSize)/2, height/3); 
 }
 
-function tie() {
+function announceTie() {
   fill(0);
   textAlign(CENTER);
   textSize(60);
