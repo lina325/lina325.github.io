@@ -1,11 +1,12 @@
 // Basic Connect 4
 // Angelina Zhu
-// Nov 8, 2024
+// Nov 15, 2024
 //
 // Extra for Experts:
-// Clipping images + ?
+// Clipping images (+ Maybe simple selection screen)
 
 // Checking logic for check-win system help from my dad
+
 // Image credits: https://www.youtube.com/channel/UCArLZtok93cO5R9RI4_Y5Jw (Blue chip)
 // https://www.reddit.com/r/kpop/comments/1dit3dz/stray_kids_ate_logo_teaser_image/ (Red chip)
 // https://ca.pinterest.com/pin/36310340742061984/ (Green chip)
@@ -104,7 +105,6 @@ function generateGrid(cols, rows) {
       newGrid[x].push(chipProperties(x, y));
 
       circleMask = createGraphics(squareSize, squareSize);
-      circleMask.fill(100);
     }
   }
   return newGrid;
@@ -119,12 +119,48 @@ function displayStartScreen() {
   textSize(30);
   text("Press space bar to start", width/2, height/2);
 
+  // Move to selection screen when space pressed
   if (keyIsPressed && keyCode === 32) {
     screenState = "select";
   }
 }
 
 function displaySelectionScreen() {
+  // Display box and change bg colour if mouse is hovering over each chip
+  
+  // Red
+  if (mouseX > width/8 - squareSize/2 && mouseX < width/8 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
+    background("#eddddd");
+    stroke(2);
+    fill(0, 0, 0, 1);
+    square(width/8 - squareSize/2, height/2 - squareSize/2, squareSize);
+  }
+
+  // Blue
+  else if (mouseX > width/8 * 3 - squareSize/2 && mouseX < width/8 * 3 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
+    background("#dde8ed");
+    stroke(2);
+    fill(0, 0, 0, 1);
+    square(width/8 * 3 - squareSize/2, height/2 - squareSize/2, squareSize);
+  }
+
+  // Green
+  else if (mouseX > width/8 * 5 - squareSize/2 && mouseX < width/8 * 5 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
+    background("#ddede0");
+    stroke(2);
+    fill(0, 0, 0, 1);
+    square(width/8 * 5 - squareSize/2, height/2 - squareSize/2, squareSize);
+  }
+
+  // Yellow
+  else if (mouseX > width/8 * 7 - squareSize/2 && mouseX < width/8 * 7 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
+    background("#edeadd");
+    stroke(2);
+    fill(0, 0, 0, 1);
+    square(width/8 * 7 - squareSize/2, height/2 - squareSize/2, squareSize);
+  }
+
+  // Text
   noStroke();
   fill(0);
   textSize(45);
@@ -141,38 +177,6 @@ function displaySelectionScreen() {
   image(blueChip, width/8 * 3 - squareSize/2, height/2 - squareSize/2, squareSize, squareSize);
   image(greenChip, width/8 * 5 - squareSize/2, height/2 - squareSize/2, squareSize, squareSize);
   image(yellowChip, width/8 * 7 - squareSize/2, height/2 - squareSize/2, squareSize, squareSize);
-  
-
-  // Display box if mouse is hovering over 
-
-  // Red
-  if (mouseX > width/8 - squareSize/2 && mouseX < width/8 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
-    stroke(2);
-    fill(0, 0, 0, 1);
-    square(width/8 - squareSize/2, height/2 - squareSize/2, squareSize);
-  }
-
-  // Blue
-  else if (mouseX > width/8 * 3 - squareSize/2 && mouseX < width/8 * 3 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
-    stroke(2);
-    fill(0, 0, 0, 1);
-    square(width/8 * 3 - squareSize/2, height/2 - squareSize/2, squareSize);
-  }
-
-  // Green
-  else if (mouseX > width/8 * 5 - squareSize/2 && mouseX < width/8 * 5 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
-    stroke(2);
-    fill(0, 0, 0, 1);
-    square(width/8 * 5 - squareSize/2, height/2 - squareSize/2, squareSize);
-  }
-
-  // Yellow
-  else if (mouseX > width/8 * 7 - squareSize/2 && mouseX < width/8 * 7 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
-    stroke(2);
-    fill(0, 0, 0, 1);
-    square(width/8 * 7 - squareSize/2, height/2 - squareSize/2, squareSize);
-  }
-
 
   // Check if both players have selected
   if (selectingPlayer === 3) {
@@ -185,7 +189,7 @@ function displayBoard() {
 
   for (let x = 0; x < NUM_OF_COLS; x ++) {
     for (let y = 0; y < NUM_OF_ROWS; y ++) {
-      fill(grid[x][y].colour);
+      fill(255);
       circle(x * squareSize + squareSize/2, y * squareSize + squareSize/2, grid[x][y].diameter);
       
       if (grid[x][y].img !== 255) {
@@ -204,20 +208,21 @@ function displayButton() {
   fill(0);
   textSize(40);
 
-  if (screenState === "win" || screenState === "tie") {
-    text("Replay", width - (width - NUM_OF_COLS*squareSize)/2, height/4 * 3 + 20);
+  if (screenState === "player-player") {
+    text("Back", width - (width - NUM_OF_COLS*squareSize)/2, height/4 * 3 + 20);
   }
   else {
-    text("Back", width - (width - NUM_OF_COLS*squareSize)/2, height/4 * 3 + 20);
+    text("Replay", width - (width - NUM_OF_COLS*squareSize)/2, height/4 * 3 + 20);
   }
 
   // If button is pressed, go back to start screen + reset
   if (mouseX >= width - (width - NUM_OF_COLS*squareSize)/2 - BUTTON_PROPERTIES.width/2 && mouseX < width - (width - NUM_OF_COLS*squareSize)/2 + BUTTON_PROPERTIES.width/2 && mouseY > height/4 * 3 - BUTTON_PROPERTIES.height/2 && mouseY < height/4 * 3 + BUTTON_PROPERTIES.height/2 && mouseIsPressed) {
     grid = generateGrid(NUM_OF_COLS, NUM_OF_ROWS);
-    selectingPlayer = 0;
+    selectingPlayer = 1;
     playerTurn = 0;
+    win = false;
+    allFilled = false;
     screenState = "select";
-
   }
 
 }
@@ -234,17 +239,18 @@ function displayTurn() {
 }
 
 function mouseClicked() {
-
-  // Selecting screen
+  // Selection screen
   if (screenState === "select") {
 
     // Red chip
     if (mouseX > width/8 - squareSize/2 && mouseX < width/8 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
       if (selectingPlayer === 1) {
         player1 = redChip;
+        selectingPlayer ++;
       }
-      else {
+      else if (player1 !== redChip) {
         player2 = redChip;
+        selectingPlayer ++;
       }
     }
 
@@ -252,9 +258,11 @@ function mouseClicked() {
     else if (mouseX > width/8 * 3 - squareSize/2 && mouseX < width/8 * 3 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
       if (selectingPlayer === 1) {
         player1 = blueChip;
+        selectingPlayer ++;
       }
-      else {
+      else if (player1 !== blueChip) {
         player2 = blueChip;
+        selectingPlayer ++;
       }
     }
 
@@ -262,9 +270,11 @@ function mouseClicked() {
     else if (mouseX > width/8 * 5 - squareSize/2 && mouseX < width/8 * 5 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
       if (selectingPlayer === 1) {
         player1 = greenChip;
+        selectingPlayer ++;
       }
-      else {
+      else if (player1 !== greenChip) {
         player2 = greenChip;
+        selectingPlayer ++;
       }
     }
 
@@ -272,13 +282,13 @@ function mouseClicked() {
     else if (mouseX > width/8 * 7 - squareSize/2 && mouseX < width/8 * 7 + squareSize/2 && mouseY > height/2 - squareSize/2 && mouseY < height/2 - squareSize/2 + squareSize) {
       if (selectingPlayer === 1) {
         player1 = yellowChip;
+        selectingPlayer ++;
       }
-      else {
+      else if (player1 !== yellowChip) {
         player2 = yellowChip;
+        selectingPlayer ++;
       }
     }
-
-    selectingPlayer ++;
   }
 
 
@@ -393,11 +403,11 @@ function checkWin() {
           winColour = "Blue";
           win = true;
         }
-        else if (grid[x][y].img === greenChip && grid[x=1][y+1].img === greenChip && grid[x=2][y+2].img === greenChip && grid[x=3][y+3].img === greenChip) {
+        else if (grid[x][y].img === greenChip && grid[x-1][y+1].img === greenChip && grid[x-2][y+2].img === greenChip && grid[x-3][y+3].img === greenChip) {
           winColour = "Green";
           win = true;
         }
-        else if (grid[x][y].img === yellowChip && grid[x=1][y+1].img === yellowChip && grid[x=2][y+2].img === yellowChip && grid[x=3][y+3].img === yellowChip) {
+        else if (grid[x][y].img === yellowChip && grid[x-1][y+1].img === yellowChip && grid[x-2][y+2].img === yellowChip && grid[x-3][y+3].img === yellowChip) {
           winColour = "Yellow";
           win = true;
         }
@@ -417,7 +427,7 @@ function checkWin() {
   for (let x = 0; x < NUM_OF_COLS; x ++) {
     for (let y = 0; y < NUM_OF_ROWS; y ++) {
       if (grid[x][y].state === "empty") {
-        return false;
+        return;
       }
     }
   }
@@ -443,7 +453,6 @@ function chipProperties(x, y) {
     x: x, 
     y: y,
     diameter: squareSize - squareSize*0.15,
-    colour: 255,
     state: "empty",
     img: 255,
   };
