@@ -18,6 +18,7 @@
 - [Platformer from Text File](15-platformer)
 - [Walker OOP](walker-oop)
 - [Walker OOP Array](walker-oop-array)
+- [Fireworks OOP](fireworks)
 
 ## Projects
 - [Interactive Scene](interactive-scene)
