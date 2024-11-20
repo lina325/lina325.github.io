@@ -19,6 +19,7 @@
 - [Walker OOP](walker-oop)
 - [Walker OOP Array](walker-oop-array)
 - [Fireworks OOP](fireworks)
+- [Connected Nodes OOP](nodes)
 
 ## Projects
 - [Interactive Scene](interactive-scene)
